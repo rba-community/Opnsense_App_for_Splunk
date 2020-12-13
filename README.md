@@ -27,4 +27,8 @@ Heavy Forwarders | no | no | Not supported
 
 Please open an issue at [github.com](https://github.com/ZachChristensen28/Opnsense_App_for_Splunk)
 
+## Feature Requests
+
+- OPNsense netflow logs to Splunk walkthrough
+
 ## Versions
