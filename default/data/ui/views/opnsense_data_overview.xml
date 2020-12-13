@@ -6,6 +6,21 @@
     <latest>$global_time_tok.latest$</latest>
     <sampleRatio>1</sampleRatio>
   </search>
+  <search id="ta_version_check">
+    <query>| rest /services/apps/local splunk_server=local
+| search title="TA-opnsense" version>=1.3.2</query>
+    <earliest>-1s</earliest>
+    <latest>now</latest>
+    <sampleRatio>1</sampleRatio>
+    <progress>
+      <condition match="'job.resultCount'== 0">
+        <set token="show_message">true</set>
+      </condition>
+      <condition>
+        <unset token="show_message"/>
+      </condition>
+    </progress>
+  </search>
   <fieldset submitButton="false">
     <input type="time" token="global_time_tok" searchWhenChanged="true">
       <label></label>
@@ -15,6 +30,13 @@
       </default>
     </input>
   </fieldset>
+  <row depends="$show_message$">
+    <html>
+      <p>
+        <strong>Note: </strong> TA-opnsense is either missing or does not meet the version requirements. Please update to the latest version of <a target="_blank" href="https://splunkbase.splunk.com/app/4538/">TA-opnsense</a>.
+      </p>
+    </html>
+  </row>
   <row>
     <panel>
       <title>Data Inventory Overview</title>
