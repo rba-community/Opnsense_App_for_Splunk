@@ -1,5 +1,5 @@
 <form>
-  <label>OPNsense Data Overview</label>
+  <label>Data Overview</label>
   <search id="base">
     <query>| tstats count, sum(opnsense_event_length) as bytes where index=* sourcetype=opnsense* by _time, index, sourcetype span=5m</query>
     <earliest>$global_time_tok.earliest$</earliest>
