@@ -2,5 +2,6 @@
   <view name="opnsense_data_overview" default="true" />
   <view name="opnsense_traffic_overview" />
   <view name="opnsense_vpn_overview" />
+  <view name="opnsense_contribute" />
   <view name="search" />
 </nav>
