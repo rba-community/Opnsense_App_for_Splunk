@@ -230,7 +230,7 @@
             <table>
                 <title>Top Sources Detail</title>
                 <search base="base_detail">
-                    <query>| stats sparkline(sum(count), 5m) as Sparkline, sum(count) as count by src
+                    <query>| stats sparkline(sum(count), 5m) as sparkline, sum(count) as count by src
 | sort 10 -count</query>
                 </search>
                 <option name="count">20</option>
@@ -246,7 +246,7 @@
             <table>
                 <title>Top Destinations Detail</title>
                 <search base="base_detail">
-                    <query>| stats sparkline(sum(count), 5m) as Sparkline, sum(count) as count by dest
+                    <query>| stats sparkline(sum(count), 5m) as sparkline, sum(count) as count by dest
 | sort 10 -count</query>
                 </search>
                 <option name="count">20</option>
