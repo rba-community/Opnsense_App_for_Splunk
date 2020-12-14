@@ -12,8 +12,8 @@ APP has a web UI | Yes, this app contains views.
 
 ## Requirements
 
-- Install [TA-opnsense](https://github.com/ZachChristensen28/TA-opnsense) also located on [Splunkbase](https://splunkbase.splunk.com/app/4538/)
-- Install [Splunk Common Information Model](https://splunkbase.splunk.com/app/1621/)
+- Install [TA-opnsense](https://github.com/ZachChristensen28/TA-opnsense) (version 1.3.2 or higher) also located on [Splunkbase](https://splunkbase.splunk.com/app/4538/)
+- Install [Splunk Common Information Model](https://splunkbase.splunk.com/app/1621/) (version 4.x)
 
 ### Where to Install
 
