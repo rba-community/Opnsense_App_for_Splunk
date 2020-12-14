@@ -1,8 +1,0 @@
-<dashboard>
-    <label>Contribute</label>
-    <row>
-        <html>
-            <p>Do you have useful dashboards for OPNsense data? Please share them with us! Visit our <a targte="_blank" href="https://github.com/ZachChristensen28/Opnsense_App_for_Splunk">Github</a> and submit a pull request for your dashboards to be included in the next release.</p>
-        </html>
-    </row>
-</dashboard>
