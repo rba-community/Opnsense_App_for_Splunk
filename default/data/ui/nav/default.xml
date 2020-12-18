@@ -1,5 +1,6 @@
 <nav search_view="search">
-  <view name="opnsense_data_overview" default="true" />
+  <view name="opnsene_system_overview" default="true" />
+  <view name="opnsense_data_overview" />
   <view name="opnsense_traffic_overview" />
   <view name="opnsense_vpn_overview" />
   <view name="opnsense_ids_overview" />
