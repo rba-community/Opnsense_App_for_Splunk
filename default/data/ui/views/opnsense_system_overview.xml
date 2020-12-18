@@ -144,9 +144,21 @@
     <row>
         <panel>
             <title>Plugin Details</title>
+            <input type="text" token="p_tok" searchWhenChanged="true">
+                <label>Plugin</label>
+                <change>
+                    <condition match="len('value')&gt;1">
+                        <set token="p_token_match">where match(name, "(?i)$value$")</set>
+                    </condition>
+                    <condition>
+                        <set token="p_token_match">search *</set>
+                    </condition>
+                </change>
+            </input>
             <table>
                 <search>
                     <query>`opnsense_system_index` sourcetype="opnsense:system" collection_type="plugin"
+| $p_token_match$
 | dedup name
 | sort name
 | eval configured=if(configured=="1", "True", "False")
