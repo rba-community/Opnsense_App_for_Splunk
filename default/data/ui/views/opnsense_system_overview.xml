@@ -1,8 +1,24 @@
 <form hideFilters="True">
     <label>System Overview</label>
+    <search id="picker">
+        <query>| tstats count where `opnsense_system_index` sourcetype=opnsense:system by host</query>
+        <earliest>$global_time_tok.earliest$</earliest>
+        <latest>$global_time_tok.latest$</latest>
+        <sampleRatio>1</sampleRatio>
+        <progress>
+            <condition match="'job.resultCount'&gt;1">
+                <set token="by_host">by host</set>
+                <set token="trellis">1</set>
+            </condition>
+            <condition>
+                <set token="by_host">`opnsense_comment("placeholder")`</set>
+                <set token="trellis">0</set>
+            </condition>
+        </progress>
+    </search>
     <search id="system_base">
         <query>`opnsense_system_index` sourcetype=opnsense:system collection_type=system
-| stats latest(product_version) as product_version, latest(os_version) as os_version</query>
+| stats latest(product_version) as product_version, latest(os_version) as os_version $by_host$</query>
         <earliest>$global_time_tok.earliest$</earliest>
         <latest>$global_time_tok.latest$</latest>
         <sampleRatio>1</sampleRatio>
@@ -21,7 +37,7 @@
             <title>OPNsense Version</title>
             <single>
                 <search base="system_base">
-                    <query>| fields product_version</query>
+                    <query>| stats values(product_version) as product_version $by_host$</query>
                 </search>
                 <option name="colorBy">value</option>
                 <option name="colorMode">none</option>
@@ -32,9 +48,10 @@
                 <option name="refresh.display">progressbar</option>
                 <option name="showSparkline">1</option>
                 <option name="showTrendIndicator">1</option>
-                <option name="trellis.enabled">0</option>
+                <option name="trellis.enabled">$trellis$</option>
                 <option name="trellis.scales.shared">1</option>
-                <option name="trellis.size">medium</option>
+                <option name="trellis.size">large</option>
+                <option name="trellis.splitBy">host</option>
                 <option name="trendColorInterpretation">standard</option>
                 <option name="trendDisplayMode">absolute</option>
                 <option name="underLabel">OPNsense Version</option>
@@ -47,7 +64,7 @@
             <title>OS Version</title>
             <single>
                 <search base="system_base">
-                    <query>| fields os_version</query>
+                    <query>| stats values(os_version) as os_version $by_host$</query>
                 </search>
                 <option name="colorBy">value</option>
                 <option name="colorMode">none</option>
@@ -58,9 +75,9 @@
                 <option name="refresh.display">progressbar</option>
                 <option name="showSparkline">0</option>
                 <option name="showTrendIndicator">0</option>
-                <option name="trellis.enabled">0</option>
+                <option name="trellis.enabled">$trellis$</option>
                 <option name="trellis.scales.shared">0</option>
-                <option name="trellis.size">medium</option>
+                <option name="trellis.size">large</option>
                 <option name="trendColorInterpretation">standard</option>
                 <option name="trendDisplayMode">absolute</option>
                 <option name="underLabel">OS Version</option>
@@ -85,7 +102,7 @@
                     <query>`opnsense_system_index` sourcetype="opnsense:system" collection_type="system"
 | eval update_msg=if(status=="ok" AND status_upgrade_action=="all", "Update Available", "Up to Date")
 | eval can_update=if(update_msg="Update Available", 2, 1)
-| stats latest(update_msg) as update_msg, latest(can_update) as can_update
+| stats latest(update_msg) as update_msg, latest(can_update) as can_update $by_host$
 | rangemap field=can_update low=1-1 guarded=2-2</query>
                     <earliest>$global_time_tok.earliest$</earliest>
                     <latest>$global_time_tok.latest$</latest>
@@ -100,9 +117,9 @@
                 <option name="refresh.display">progressbar</option>
                 <option name="showSparkline">1</option>
                 <option name="showTrendIndicator">1</option>
-                <option name="trellis.enabled">0</option>
+                <option name="trellis.enabled">$trellis$</option>
                 <option name="trellis.scales.shared">1</option>
-                <option name="trellis.size">medium</option>
+                <option name="trellis.size">large</option>
                 <option name="trendColorInterpretation">standard</option>
                 <option name="trendDisplayMode">absolute</option>
                 <option name="unitPosition">after</option>
@@ -115,7 +132,7 @@
                 <search>
                     <query>`opnsense_system_index` sourcetype=opnsense:system collection_type="system" 
 | eval reboot_msg=if(upgrade_needs_reboot=="1", "Reboot Required", "Reboot Not Required")
-| stats latest(reboot_msg) as reboot_msg, latest(upgrade_needs_reboot) as upgrade_needs_reboot
+| stats latest(reboot_msg) as reboot_msg, latest(upgrade_needs_reboot) as upgrade_needs_reboot $by_host$
 | rangemap field=upgrade_needs_reboot low=0-0 high=1-1</query>
                     <earliest>$global_time_tok.earliest$</earliest>
                     <latest>$global_time_tok.latest$</latest>
@@ -130,9 +147,9 @@
                 <option name="refresh.display">progressbar</option>
                 <option name="showSparkline">1</option>
                 <option name="showTrendIndicator">1</option>
-                <option name="trellis.enabled">0</option>
+                <option name="trellis.enabled">$trellis$</option>
                 <option name="trellis.scales.shared">1</option>
-                <option name="trellis.size">medium</option>
+                <option name="trellis.size">large</option>
                 <option name="trendColorInterpretation">standard</option>
                 <option name="trendDisplayMode">absolute</option>
                 <option name="unitPosition">after</option>
@@ -144,6 +161,21 @@
     <row>
         <panel>
             <title>Plugin Details</title>
+            <input type="multiselect" token="host_tok" searchWhenChanged="true">
+                <label>Host</label>
+                <choice value="*">All</choice>
+                <default>*</default>
+                <prefix>host IN(</prefix>
+                <suffix>)</suffix>
+                <valuePrefix>"</valuePrefix>
+                <valueSuffix>"</valueSuffix>
+                <delimiter>,</delimiter>
+                <fieldForLabel>host</fieldForLabel>
+                <fieldForValue>host</fieldForValue>
+                <search base="picker">
+                    <query>| dedup host</query>
+                </search>
+            </input>
             <input type="text" token="p_tok" searchWhenChanged="true">
                 <label>Plugin</label>
                 <change>
@@ -157,14 +189,14 @@
             </input>
             <table>
                 <search>
-                    <query>`opnsense_system_index` sourcetype="opnsense:system" collection_type="plugin"
+                    <query>`opnsense_system_index` sourcetype="opnsense:system" collection_type="plugin" $host_tok$
 | $p_token_match$
-| dedup name
+| dedup host, name
 | sort name
 | eval configured=if(configured=="1", "True", "False")
 | eval installed=if(installed=="1", "True", "False")
-| rename flatsize as Size, name as Name, comment as Description, configured as Configured, installed as Installed version as Version
-| table Name, Description, Version, Size, Installed, Configured</query>
+| rename host as Host, flatsize as Size, name as Name, comment as Description, configured as Configured, installed as Installed version as Version
+| table Host, Name, Description, Version, Size, Installed, Configured</query>
                     <earliest>$global_time_tok.earliest$</earliest>
                     <latest>$global_time_tok.latest$</latest>
                     <sampleRatio>1</sampleRatio>
