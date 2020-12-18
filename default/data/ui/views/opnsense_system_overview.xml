@@ -8,17 +8,22 @@
         <progress>
             <condition match="'job.resultCount'&gt;1">
                 <set token="by_host">by host</set>
-                <set token="trellis">1</set>
+                <set token="show_multi">true</set>
+                <unset token="show_single"></unset>
             </condition>
             <condition>
                 <set token="by_host">`opnsense_comment("placeholder")`</set>
-                <set token="trellis">0</set>
+                <set token="show_single">true</set>
+                <unset token="show_multi"></unset>
             </condition>
         </progress>
     </search>
     <search id="system_base">
         <query>`opnsense_system_index` sourcetype=opnsense:system collection_type=system
-| stats latest(product_version) as product_version, latest(os_version) as os_version $by_host$</query>
+| eval update_msg=if(status=="ok" AND status_upgrade_action=="all", "Update Available", "Up to Date")
+| eval can_update=if(update_msg="Update Available", 2, 1)
+| eval reboot_msg=if(upgrade_needs_reboot=="1", "Reboot Required", "Reboot Not Required")
+| stats latest(product_version) as product_version, latest(os_version) as os_version, latest(update_msg) as update_msg, latest(can_update) as can_update, latest(reboot_msg) as reboot_msg, latest(upgrade_needs_reboot) as upgrade_needs_reboot $by_host$</query>
         <earliest>$global_time_tok.earliest$</earliest>
         <latest>$global_time_tok.latest$</latest>
         <sampleRatio>1</sampleRatio>
@@ -32,12 +37,12 @@
             </default>
         </input>
     </fieldset>
-    <row>
+    <row depends="$show_single$">
         <panel>
             <title>OPNsense Version</title>
             <single>
                 <search base="system_base">
-                    <query>| stats values(product_version) as product_version $by_host$</query>
+                    <query>| fields product_version</query>
                 </search>
                 <option name="colorBy">value</option>
                 <option name="colorMode">none</option>
@@ -48,7 +53,7 @@
                 <option name="refresh.display">progressbar</option>
                 <option name="showSparkline">1</option>
                 <option name="showTrendIndicator">1</option>
-                <option name="trellis.enabled">$trellis$</option>
+                <option name="trellis.enabled">0</option>
                 <option name="trellis.scales.shared">1</option>
                 <option name="trellis.size">large</option>
                 <option name="trellis.splitBy">host</option>
@@ -64,7 +69,7 @@
             <title>OS Version</title>
             <single>
                 <search base="system_base">
-                    <query>| stats values(os_version) as os_version $by_host$</query>
+                    <query>| fields os_version</query>
                 </search>
                 <option name="colorBy">value</option>
                 <option name="colorMode">none</option>
@@ -75,7 +80,7 @@
                 <option name="refresh.display">progressbar</option>
                 <option name="showSparkline">0</option>
                 <option name="showTrendIndicator">0</option>
-                <option name="trellis.enabled">$trellis$</option>
+                <option name="trellis.enabled">0</option>
                 <option name="trellis.scales.shared">0</option>
                 <option name="trellis.size">large</option>
                 <option name="trendColorInterpretation">standard</option>
@@ -87,10 +92,10 @@
             </single>
         </panel>
     </row>
-    <row>
+    <row depends="$show_single$">
         <panel>
             <single>
-                <search>
+                <search base="system_base">
                     <done>
                         <condition match="'result.update_msg'==&quot;Update Available&quot;">
                             <set token="show_update">true</set>
@@ -99,14 +104,8 @@
                             <unset token="show_update"></unset>
                         </condition>
                     </done>
-                    <query>`opnsense_system_index` sourcetype="opnsense:system" collection_type="system"
-| eval update_msg=if(status=="ok" AND status_upgrade_action=="all", "Update Available", "Up to Date")
-| eval can_update=if(update_msg="Update Available", 2, 1)
-| stats latest(update_msg) as update_msg, latest(can_update) as can_update $by_host$
+                    <query>| fields update_msg, can_update 
 | rangemap field=can_update low=1-1 guarded=2-2</query>
-                    <earliest>$global_time_tok.earliest$</earliest>
-                    <latest>$global_time_tok.latest$</latest>
-                    <sampleRatio>1</sampleRatio>
                 </search>
                 <option name="colorBy">value</option>
                 <option name="colorMode">block</option>
@@ -117,7 +116,7 @@
                 <option name="refresh.display">progressbar</option>
                 <option name="showSparkline">1</option>
                 <option name="showTrendIndicator">1</option>
-                <option name="trellis.enabled">$trellis$</option>
+                <option name="trellis.enabled">0</option>
                 <option name="trellis.scales.shared">1</option>
                 <option name="trellis.size">large</option>
                 <option name="trendColorInterpretation">standard</option>
@@ -129,14 +128,9 @@
         </panel>
         <panel depends="$show_update$">
             <single>
-                <search>
-                    <query>`opnsense_system_index` sourcetype=opnsense:system collection_type="system" 
-| eval reboot_msg=if(upgrade_needs_reboot=="1", "Reboot Required", "Reboot Not Required")
-| stats latest(reboot_msg) as reboot_msg, latest(upgrade_needs_reboot) as upgrade_needs_reboot $by_host$
+                <search base="system_base">
+                    <query>| fields reboot_msg, upgrade_needs_reboot
 | rangemap field=upgrade_needs_reboot low=0-0 high=1-1</query>
-                    <earliest>$global_time_tok.earliest$</earliest>
-                    <latest>$global_time_tok.latest$</latest>
-                    <sampleRatio>1</sampleRatio>
                 </search>
                 <option name="colorBy">value</option>
                 <option name="colorMode">block</option>
@@ -147,7 +141,7 @@
                 <option name="refresh.display">progressbar</option>
                 <option name="showSparkline">1</option>
                 <option name="showTrendIndicator">1</option>
-                <option name="trellis.enabled">$trellis$</option>
+                <option name="trellis.enabled">0</option>
                 <option name="trellis.scales.shared">1</option>
                 <option name="trellis.size">large</option>
                 <option name="trendColorInterpretation">standard</option>
@@ -156,6 +150,19 @@
                 <option name="useColors">0</option>
                 <option name="useThousandSeparators">1</option>
             </single>
+        </panel>
+    </row>
+    <row depends="$show_multi$">
+        <panel>
+            <title>System Information</title>
+            <table>
+                <search base="system_base">
+                    <query>| rename host as Host, product_version as "OPNsense Version", os_version as "OS Version", update_msg as "Update Info", reboot_msg as "Reboot Info"
+| fields - can_update, upgrade_needs_reboot</query>
+                </search>
+                <option name="drilldown">none</option>
+                <option name="refresh.display">progressbar</option>
+            </table>
         </panel>
     </row>
     <row>
