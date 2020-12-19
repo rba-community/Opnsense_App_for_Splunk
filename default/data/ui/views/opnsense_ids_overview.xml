@@ -52,6 +52,7 @@
                 <option name="charting.legend.mode">standard</option>
                 <option name="charting.legend.placement">top</option>
                 <option name="charting.lineWidth">2</option>
+                <option name="charting.fieldColors">{"critical": "#dc4e41", "high": "#f1813f", "medium": "#f8be34", "low": "#0877a6"}</option>
                 <option name="trellis.enabled">0</option>
                 <option name="trellis.scales.shared">1</option>
                 <option name="trellis.size">medium</option>
