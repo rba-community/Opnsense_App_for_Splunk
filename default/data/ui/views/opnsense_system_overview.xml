@@ -167,7 +167,7 @@
     </row>
     <row>
         <panel>
-            <title>Plugin Details</title>
+            <title>Installed Plugins</title>
             <input type="multiselect" token="host_tok" searchWhenChanged="true">
                 <label>Host</label>
                 <choice value="*">All</choice>
