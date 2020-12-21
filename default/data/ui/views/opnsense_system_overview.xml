@@ -18,6 +18,19 @@
             </condition>
         </progress>
     </search>
+    <search id="note">
+        <query>| tstats count where index=_internal sourcetype=taopnsense:log</query>
+        <earliest>-24@h</earliest>
+        <latest>now</latest>
+        <progress>
+            <condition match="'job.resultCount'==0">
+                <set token="show_note">true</set>
+            </condition>
+            <condition>
+                <unset token="show_note" />
+            </condition>
+        </progress>
+    </search>
     <search id="system_base">
         <query>`opnsense_system_index` sourcetype=opnsense:system collection_type=system
 | eval update_msg=if(status=="ok" AND status_upgrade_action=="all", "Update Available", "Up to Date")
@@ -37,6 +50,13 @@
             </default>
         </input>
     </fieldset>
+    <row depends="$show_note$">
+        <panel>
+            <html>
+                <p>This Dashboard depends on the Modular input provided with the OPNsense Add-on. No information will display unless the input is setup.</p>
+            </html>
+        </panel>
+    </row>
     <row depends="$show_single$">
         <panel>
             <title>OPNsense Version</title>
