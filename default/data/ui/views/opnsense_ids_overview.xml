@@ -106,8 +106,10 @@
                 <search>
                     <query>| tstats `opnsense_summariesonly` count from datamodel=Intrusion_Detection.IDS_Attacks where sourcetype=opnsense:* by _time, IDS_Attacks.src, IDS_Attacks.dest, IDS_Attacks.signature, IDS_Attacks.category, IDS_Attacks.severity span=5m
 | rename IDS_Attacks.* as *
-| stats sparkline(sum(count), 1h) as sparkline, dc(dest) as unique_destinations, sum(count) as count by src, signature, category
-| sort 10 -count</query>
+| stats max(_time) as latest_time, sparkline(sum(count), 1h) as sparkline, dc(dest) as unique_destinations, sum(count) as count by src, signature, category
+| convert timeformat="%c" ctime(latest_time)
+| fields latest_time, src, category, signature, sparkline, unique_destinations, count
+| head 100</query>
                     <earliest>$global_time_tok.earliest$</earliest>
                     <latest>$global_time_tok.latest$</latest>
                     <sampleRatio>1</sampleRatio>

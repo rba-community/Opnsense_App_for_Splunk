@@ -15,6 +15,9 @@ Version 1.0.1
 
 New
 - Added System Dashboard. This is powered by the modular input from the Add-on. 
+
+Updated
+- IDS Overview dashboard to include the time of latest intrusion event.
 ```
 
 ## Requirements
