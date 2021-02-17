@@ -33,7 +33,7 @@
     </search>
     <search id="system_base">
         <query>`opnsense_system_index` sourcetype=opnsense:system collection_type=system
-| eval update_msg=if(status=="ok" AND status_upgrade_action=="all", "Update Available", "Up to Date")
+| eval update_msg=if(status=="ok" AND isnotnull(status_upgrade_action), "Update Available", "Up to Date")
 | eval can_update=if(update_msg="Update Available", 2, 1)
 | eval reboot_msg=if(upgrade_needs_reboot=="1", "Reboot Required", "Reboot Not Required")
 | stats latest(product_version) as product_version, latest(os_version) as os_version, latest(update_msg) as update_msg, latest(can_update) as can_update, latest(reboot_msg) as reboot_msg, latest(upgrade_needs_reboot) as upgrade_needs_reboot $by_host$</query>
@@ -124,7 +124,7 @@
                             <unset token="show_update"></unset>
                         </condition>
                     </done>
-                    <query>| fields update_msg, can_update 
+                    <query>| fields update_msg, can_update
 | rangemap field=can_update low=1-1 guarded=2-2</query>
                 </search>
                 <option name="colorBy">value</option>
