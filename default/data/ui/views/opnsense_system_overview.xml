@@ -27,16 +27,17 @@
                 <set token="show_note">true</set>
             </condition>
             <condition>
-                <unset token="show_note" />
+                <unset token="show_note"></unset>
             </condition>
         </progress>
     </search>
     <search id="system_base">
-        <query>`opnsense_system_index` sourcetype=opnsense:system collection_type=system
-| eval update_msg=if(status=="ok" AND isnotnull(status_upgrade_action), "Update Available", "Up to Date")
-| eval can_update=if(update_msg="Update Available", 2, 1)
-| eval reboot_msg=if(upgrade_needs_reboot=="1", "Reboot Required", "Reboot Not Required")
-| stats latest(product_version) as product_version, latest(os_version) as os_version, latest(update_msg) as update_msg, latest(can_update) as can_update, latest(reboot_msg) as reboot_msg, latest(upgrade_needs_reboot) as upgrade_needs_reboot $by_host$</query>
+        <query>`opnsense_system_index` sourcetype=opnsense:system collection_type=system 
+| eval update_msg=if(status=="update", "Update Available", "Up to Date") 
+| eval can_update=if(update_msg="Update Available", 2, 1) 
+| eval new_version=if(can_update==2, 'all_packages.opnsense.new', "n/a") 
+| eval reboot_msg=if(upgrade_needs_reboot=="1", "Reboot Required", "Reboot Not Required") 
+| stats latest(product_version) as product_version, latest(new_version) as new_version, latest(status_msg) as status_msg, max(_time) as last_check, latest(os_version) as os_version, latest(update_msg) as update_msg, latest(can_update) as can_update, latest(reboot_msg) as reboot_msg, latest(upgrade_needs_reboot) as upgrade_needs_reboot $by_host$</query>
         <earliest>$global_time_tok.earliest$</earliest>
         <latest>$global_time_tok.latest$</latest>
         <sampleRatio>1</sampleRatio>
@@ -177,11 +178,16 @@
             <title>System Information</title>
             <table>
                 <search base="system_base">
-                    <query>| rename host as Host, product_version as "OPNsense Version", os_version as "OS Version", update_msg as "Update Info", reboot_msg as "Reboot Info"
-| fields - can_update, upgrade_needs_reboot</query>
+                    <query>| fields + host, product_version, new_version, status_msg, os_version, last_check
+| convert ctime(last_check) timeformat="%c"
+| rename host as Host, product_version as "Current OPNsense Version", new_version as "New OPNsense Version", status_msg as "Status Message", os_version as "OS Version", last_check as "Last Update Check"</query>
                 </search>
                 <option name="drilldown">none</option>
                 <option name="refresh.display">progressbar</option>
+                <format type="color" field="Reboot Info">
+                    <colorPalette type="sharedList"></colorPalette>
+                    <scale type="sharedCategory"></scale>
+                </format>
             </table>
         </panel>
     </row>
