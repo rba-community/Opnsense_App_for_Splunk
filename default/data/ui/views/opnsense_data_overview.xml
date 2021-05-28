@@ -21,8 +21,8 @@
       </condition>
     </progress>
   </search>
-  <fieldset submitButton="true" autoRun="false">
-    <input type="time" token="global_time_tok" searchWhenChanged="true">
+  <fieldset submitButton="true" autoRun="true">
+    <input type="time" token="global_time_tok" searchWhenChanged="false">
       <label></label>
       <default>
         <earliest>-24h@h</earliest>
