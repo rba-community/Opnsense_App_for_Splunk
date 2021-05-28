@@ -1,26 +1,44 @@
 <form>
     <label>VPN Overview</label>
+    <description>Results shown for OpenVPN</description>
     <search id="base">
-        <query>| tstats `opnsense_summariesonly` count from datamodel=Network_Sessions.All_Sessions where sourcetype=opnsense:* by _time, All_Sessions.action, All_Sessions.user, All_Sessions.src_ip span=5m
+        <query>| tstats `opnsense_summariesonly` count from datamodel=Network_Sessions.All_Sessions where sourcetype=opnsense:openvpn $host_tok$ by _time, All_Sessions.action, All_Sessions.user, All_Sessions.src_ip span=5m
 | rename All_Sessions.* as *</query>
         <earliest>$global_time_tok.earliest$</earliest>
         <latest>$global_time_tok.latest$</latest>
         <sampleRatio>1</sampleRatio>
     </search>
-    <fieldset submitButton="false">
-        <input type="time" token="global_time_tok" searchWhenChanged="true">
+    <fieldset submitButton="true" autoRun="true">
+        <input type="time" token="global_time_tok" searchWhenChanged="false">
             <label></label>
             <default>
                 <earliest>-24h@h</earliest>
                 <latest>now</latest>
             </default>
         </input>
+        <input type="multiselect" token="host_tok" searchWhenChanged="false">
+            <label>Hosts</label>
+            <choice value="*">All</choice>
+            <prefix>host IN(</prefix>
+            <suffix>)</suffix>
+            <valuePrefix>"</valuePrefix>
+            <valueSuffix>"</valueSuffix>
+            <delimiter>,</delimiter>
+            <fieldForLabel>host</fieldForLabel>
+            <fieldForValue>host</fieldForValue>
+            <search>
+                <query>| tstats count where index=* sourcetype=opnsense:openvpn by host</query>
+                <earliest>-24h@h</earliest>
+                <latest>now</latest>
+            </search>
+            <initialValue>*</initialValue>
+        </input>
     </fieldset>
     <row>
         <panel>
             <map>
                 <search>
-                    <query>| tstats `opnsense_summariesonly` count from datamodel=Network_Sessions.All_Sessions where sourcetype=opnsense:* by All_Sessions.user, All_Sessions.src_ip
+                    <query>| tstats `opnsense_summariesonly` count from datamodel=Network_Sessions.All_Sessions where sourcetype=opnsense:openvpn $host_tok$ by All_Sessions.user, All_Sessions.src_ip
 | rename All_Sessions.* as *
 | iplocation src_ip
 | geostats count by Region</query>
