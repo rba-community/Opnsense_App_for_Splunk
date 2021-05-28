@@ -6,18 +6,19 @@ The OPNsense App for Splunk helps make your firewall data meaningful. Visualize 
 
  Info | Description
 ------|----------
-Version | 1.0.1 - See on [Splunkbase](https://splunkbase.splunk.com/app/5372/)
+Version | 1.1.0 - See on [Splunkbase](https://splunkbase.splunk.com/app/5372/)
 Vendor Product Version | [OPNsense® 20.7](https://opnsense.org/)
 APP has a web UI | Yes, this app contains views.
 
 ```TEXT
-Version 1.0.1
+Version 1.1.0
 
 New
 - Added System Dashboard. This is powered by the modular input from the Add-on. 
 
 Updated
 - IDS Overview dashboard to include the time of latest intrusion event.
+- All dashboards have the ability to filter by host.
 ```
 
 ## Requirements

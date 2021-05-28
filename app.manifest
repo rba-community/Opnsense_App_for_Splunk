@@ -5,7 +5,7 @@
     "id": {
       "group": null,
       "name": "Opnsense_App_for_Splunk",
-      "version": "1.0.1"
+      "version": "1.1.0"
     },
     "author": [
       {
@@ -19,7 +19,7 @@
     "classification": {
       "intendedAudience": null,
       "categories": [],
-      "developmentStatus": null
+      "developmentStatus": "Production/Stable"
     },
     "commonInformationModels": null,
     "license": {
@@ -33,14 +33,14 @@
       "uri": null
     },
     "releaseNotes": {
-      "name": "Version 1.0.0",
+      "name": "README",
       "text": "./README.md",
-      "uri": null
+      "uri": "https://splunk-opnsense-app-documentation.rtfd.io"
     }
   },
   "dependencies": {
     "TA-opnsense": {
-      "version": ">=1.3.3",
+      "version": ">=1.4.1",
       "optional": false
     },
     "Splunk_SA_CIM": {
@@ -52,6 +52,10 @@
   "inputGroups": null,
   "incompatibleApps": null,
   "platformRequirements": null,
-  "supportedDeployments": ["*"],
-  "targetWorkloads": ["_search_heads"]
+  "supportedDeployments": [
+    "*"
+  ],
+  "targetWorkloads": [
+    "_search_heads"
+  ]
 }
