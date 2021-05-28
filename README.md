@@ -1,6 +1,7 @@
 # OPNsense App for Splunk
 
 ![GitHub](https://img.shields.io/github/license/ZachChristensen28/Opnsense_App_for_Splunk)
+[![Documentation Status](https://readthedocs.org/projects/splunk-opnsense-app-documentation/badge/?version=latest)](https://splunk-opnsense-app-documentation.readthedocs.io/en/latest/?badge=latest)
 
 The OPNsense App for Splunk helps make your firewall data meaningful. Visualize system or security related events recorded by the [OPNsense® Firewall](https://opnsense.org/). This app requires the [OPNsense Add-on for Splunk](https://splunkbase.splunk.com/app/4538/).
 
@@ -20,6 +21,10 @@ New
 Updated
 - IDS Overview dashboard to include the time of latest intrusion event.
 ```
+
+## Documentation
+
+Full Documentation can be found at https://splunk-opnsense-app-documentation.rtfd.io/.
 
 ## Requirements
 
