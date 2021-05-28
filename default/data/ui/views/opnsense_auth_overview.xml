@@ -1,19 +1,36 @@
 <form>
     <label>Authentication Overview</label>
     <search id="base">
-        <query>| `opnsense_tstats` count from datamodel=Authentication.Authentication where sourcetype=opnsense:* by _time, Authentication.src, Authentication.user, Authentication.action, Authentication.app span=5m
+        <query>| `opnsense_tstats` count from datamodel=Authentication.Authentication where sourcetype=opnsense:* $host_tok$ by _time, Authentication.src, Authentication.user, Authentication.action, Authentication.app span=5m
 | rename Authentication.* as *</query>
         <earliest>$global_time_tok.earliest$</earliest>
         <latest>$global_time_tok.latest$</latest>
         <sampleRatio>1</sampleRatio>
     </search>
-    <fieldset submitButton="false">
-        <input type="time" token="global_time_tok" searchWhenChanged="true">
+    <fieldset submitButton="true" autoRun="true">
+        <input type="time" token="global_time_tok" searchWhenChanged="false">
             <label></label>
             <default>
                 <earliest>-24h@h</earliest>
                 <latest>now</latest>
             </default>
+        </input>
+        <input type="multiselect" token="host_tok" searchWhenChanged="false">
+            <label>Hosts</label>
+            <choice value="*">All</choice>
+            <prefix>host IN(</prefix>
+            <suffix>)</suffix>
+            <valuePrefix>"</valuePrefix>
+            <valueSuffix>"</valueSuffix>
+            <delimiter>,</delimiter>
+            <fieldForLabel>host</fieldForLabel>
+            <fieldForValue>host</fieldForValue>
+            <search>
+                <query>| tstats `opnsense_summariesonly` count from datamodel=Authentication.Authentication where sourcetype=opnsense:* by host</query>
+                <earliest>-24h@h</earliest>
+                <latest>now</latest>
+            </search>
+            <initialValue>*</initialValue>
         </input>
     </fieldset>
     <row>

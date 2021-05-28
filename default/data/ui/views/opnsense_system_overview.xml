@@ -1,0 +1,248 @@
+<form hideFilters="True">
+    <label>System Overview</label>
+    <search id="picker">
+        <query>| tstats count where `opnsense_system_index` sourcetype=opnsense:system by host</query>
+        <earliest>$global_time_tok.earliest$</earliest>
+        <latest>$global_time_tok.latest$</latest>
+        <sampleRatio>1</sampleRatio>
+        <progress>
+            <condition match="'job.resultCount'&gt;1">
+                <set token="by_host">by host</set>
+                <set token="show_multi">true</set>
+                <unset token="show_single"></unset>
+            </condition>
+            <condition>
+                <set token="by_host">`opnsense_comment("placeholder")`</set>
+                <set token="show_single">true</set>
+                <unset token="show_multi"></unset>
+            </condition>
+        </progress>
+    </search>
+    <search id="note">
+        <query>| tstats count where index=_internal sourcetype=taopnsense:log</query>
+        <earliest>-24@h</earliest>
+        <latest>now</latest>
+        <progress>
+            <condition match="'job.resultCount'==0">
+                <set token="show_note">true</set>
+            </condition>
+            <condition>
+                <unset token="show_note"></unset>
+            </condition>
+        </progress>
+    </search>
+    <search id="system_base">
+        <query>`opnsense_system_index` sourcetype=opnsense:system collection_type=system 
+| eval update_msg=if(status=="update", "Update Available", "Up to Date") 
+| eval can_update=if(update_msg="Update Available", 2, 1) 
+| eval new_version=if(can_update==2, 'all_packages.opnsense.new', "n/a") 
+| eval reboot_msg=if(upgrade_needs_reboot=="1", "Reboot Required", "Reboot Not Required") 
+| stats latest(product_version) as product_version, latest(new_version) as new_version, latest(status_msg) as status_msg, max(_time) as last_check, latest(os_version) as os_version, latest(update_msg) as update_msg, latest(can_update) as can_update, latest(reboot_msg) as reboot_msg, latest(upgrade_needs_reboot) as upgrade_needs_reboot $by_host$</query>
+        <earliest>$global_time_tok.earliest$</earliest>
+        <latest>$global_time_tok.latest$</latest>
+        <sampleRatio>1</sampleRatio>
+    </search>
+    <fieldset submitButton="false">
+        <input type="time" token="global_time_tok" searchWhenChanged="true">
+            <label></label>
+            <default>
+                <earliest>-24h@h</earliest>
+                <latest>now</latest>
+            </default>
+        </input>
+    </fieldset>
+    <row depends="$show_note$">
+        <panel>
+            <html>
+                <p>This Dashboard depends on the Modular input provided with the OPNsense Add-on. No information will display unless the input is setup.</p>
+            </html>
+        </panel>
+    </row>
+    <row depends="$show_single$">
+        <panel>
+            <title>OPNsense Version</title>
+            <single>
+                <search base="system_base">
+                    <query>| fields product_version</query>
+                </search>
+                <option name="colorBy">value</option>
+                <option name="colorMode">none</option>
+                <option name="drilldown">none</option>
+                <option name="numberPrecision">0</option>
+                <option name="rangeColors">["0x53a051","0x0877a6","0xf8be34","0xf1813f","0xdc4e41"]</option>
+                <option name="rangeValues">[0,30,70,100]</option>
+                <option name="refresh.display">progressbar</option>
+                <option name="showSparkline">1</option>
+                <option name="showTrendIndicator">1</option>
+                <option name="trellis.enabled">0</option>
+                <option name="trellis.scales.shared">1</option>
+                <option name="trellis.size">large</option>
+                <option name="trellis.splitBy">host</option>
+                <option name="trendColorInterpretation">standard</option>
+                <option name="trendDisplayMode">absolute</option>
+                <option name="underLabel">OPNsense Version</option>
+                <option name="unitPosition">after</option>
+                <option name="useColors">0</option>
+                <option name="useThousandSeparators">1</option>
+            </single>
+        </panel>
+        <panel>
+            <title>OS Version</title>
+            <single>
+                <search base="system_base">
+                    <query>| fields os_version</query>
+                </search>
+                <option name="colorBy">value</option>
+                <option name="colorMode">none</option>
+                <option name="drilldown">none</option>
+                <option name="numberPrecision">0</option>
+                <option name="rangeColors">["0x53a051","0x0877a6","0xf8be34","0xf1813f","0xdc4e41"]</option>
+                <option name="rangeValues">[0,30,70,100]</option>
+                <option name="refresh.display">progressbar</option>
+                <option name="showSparkline">0</option>
+                <option name="showTrendIndicator">0</option>
+                <option name="trellis.enabled">0</option>
+                <option name="trellis.scales.shared">0</option>
+                <option name="trellis.size">large</option>
+                <option name="trendColorInterpretation">standard</option>
+                <option name="trendDisplayMode">absolute</option>
+                <option name="underLabel">OS Version</option>
+                <option name="unitPosition">after</option>
+                <option name="useColors">0</option>
+                <option name="useThousandSeparators">0</option>
+            </single>
+        </panel>
+    </row>
+    <row depends="$show_single$">
+        <panel>
+            <single>
+                <search base="system_base">
+                    <done>
+                        <condition match="'result.update_msg'==&quot;Update Available&quot;">
+                            <set token="show_update">true</set>
+                        </condition>
+                        <condition>
+                            <unset token="show_update"></unset>
+                        </condition>
+                    </done>
+                    <query>| fields update_msg, can_update
+| rangemap field=can_update low=1-1 guarded=2-2</query>
+                </search>
+                <option name="colorBy">value</option>
+                <option name="colorMode">block</option>
+                <option name="drilldown">none</option>
+                <option name="numberPrecision">0</option>
+                <option name="rangeColors">["0x53a051","0x0877a6","0xf8be34","0xf1813f","0xdc4e41"]</option>
+                <option name="rangeValues">[0,30,70,100]</option>
+                <option name="refresh.display">progressbar</option>
+                <option name="showSparkline">1</option>
+                <option name="showTrendIndicator">1</option>
+                <option name="trellis.enabled">0</option>
+                <option name="trellis.scales.shared">1</option>
+                <option name="trellis.size">large</option>
+                <option name="trendColorInterpretation">standard</option>
+                <option name="trendDisplayMode">absolute</option>
+                <option name="unitPosition">after</option>
+                <option name="useColors">0</option>
+                <option name="useThousandSeparators">1</option>
+            </single>
+        </panel>
+        <panel depends="$show_update$">
+            <single>
+                <search base="system_base">
+                    <query>| fields reboot_msg, upgrade_needs_reboot
+| rangemap field=upgrade_needs_reboot low=0-0 high=1-1</query>
+                </search>
+                <option name="colorBy">value</option>
+                <option name="colorMode">block</option>
+                <option name="drilldown">none</option>
+                <option name="numberPrecision">0</option>
+                <option name="rangeColors">["0x53a051","0x0877a6","0xf8be34","0xf1813f","0xdc4e41"]</option>
+                <option name="rangeValues">[0,30,70,100]</option>
+                <option name="refresh.display">progressbar</option>
+                <option name="showSparkline">1</option>
+                <option name="showTrendIndicator">1</option>
+                <option name="trellis.enabled">0</option>
+                <option name="trellis.scales.shared">1</option>
+                <option name="trellis.size">large</option>
+                <option name="trendColorInterpretation">standard</option>
+                <option name="trendDisplayMode">absolute</option>
+                <option name="unitPosition">after</option>
+                <option name="useColors">0</option>
+                <option name="useThousandSeparators">1</option>
+            </single>
+        </panel>
+    </row>
+    <row depends="$show_multi$">
+        <panel>
+            <title>System Information</title>
+            <table>
+                <search base="system_base">
+                    <query>| fields + host, product_version, new_version, status_msg, os_version, last_check
+| convert ctime(last_check) timeformat="%c"
+| rename host as Host, product_version as "Current OPNsense Version", new_version as "New OPNsense Version", status_msg as "Status Message", os_version as "OS Version", last_check as "Last Update Check"</query>
+                </search>
+                <option name="drilldown">none</option>
+                <option name="refresh.display">progressbar</option>
+                <format type="color" field="Reboot Info">
+                    <colorPalette type="sharedList"></colorPalette>
+                    <scale type="sharedCategory"></scale>
+                </format>
+            </table>
+        </panel>
+    </row>
+    <row>
+        <panel>
+            <title>Installed Plugins</title>
+            <input type="multiselect" token="host_tok" searchWhenChanged="true">
+                <label>Host</label>
+                <choice value="*">All</choice>
+                <default>*</default>
+                <prefix>host IN(</prefix>
+                <suffix>)</suffix>
+                <valuePrefix>"</valuePrefix>
+                <valueSuffix>"</valueSuffix>
+                <delimiter>,</delimiter>
+                <fieldForLabel>host</fieldForLabel>
+                <fieldForValue>host</fieldForValue>
+                <search base="picker">
+                    <query>| dedup host</query>
+                </search>
+            </input>
+            <input type="text" token="p_tok" searchWhenChanged="true">
+                <label>Plugin</label>
+                <change>
+                    <condition match="len('value')&gt;1">
+                        <set token="p_token_match">where match(name, "(?i)$value$")</set>
+                    </condition>
+                    <condition>
+                        <set token="p_token_match">search *</set>
+                    </condition>
+                </change>
+            </input>
+            <table>
+                <search>
+                    <query>`opnsense_system_index` sourcetype="opnsense:system" collection_type="plugin" $host_tok$
+| $p_token_match$
+| dedup host, name
+| sort name
+| eval configured=if(configured=="1", "True", "False")
+| eval installed=if(installed=="1", "True", "False")
+| rename host as Host, flatsize as Size, name as Name, comment as Description, configured as Configured, installed as Installed version as Version
+| table Host, Name, Description, Version, Size, Installed, Configured</query>
+                    <earliest>$global_time_tok.earliest$</earliest>
+                    <latest>$global_time_tok.latest$</latest>
+                    <sampleRatio>1</sampleRatio>
+                </search>
+                <option name="count">20</option>
+                <option name="dataOverlayMode">none</option>
+                <option name="drilldown">none</option>
+                <option name="percentagesRow">false</option>
+                <option name="refresh.display">progressbar</option>
+                <option name="rowNumbers">false</option>
+                <option name="totalsRow">false</option>
+                <option name="wrap">true</option>
+            </table>
+        </panel>
+    </row>
+</form>
