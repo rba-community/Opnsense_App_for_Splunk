@@ -15,10 +15,10 @@ Version 1.1.0
 
 New
 - Added System Dashboard. This is powered by the modular input from the Add-on. 
+- Added host filters on all dashboards.
 
 Updated
 - IDS Overview dashboard to include the time of latest intrusion event.
-- All dashboards have the ability to filter by host.
 ```
 
 ## Requirements
