@@ -1,19 +1,36 @@
 <form>
     <label>IDS Overview</label>
     <search id="base">
-        <query>| `opnsense_tstats` count from datamodel=Intrusion_Detection.IDS_Attacks where sourcetype=opnsense:* by _time, IDS_Attacks.src, IDS_Attacks.dest, IDS_Attacks.signature, IDS_Attacks.category, IDS_Attacks.severity span=5m
+        <query>| `opnsense_tstats` count from datamodel=Intrusion_Detection.IDS_Attacks where sourcetype=opnsense:suricata* $host_tok$ by _time, IDS_Attacks.src, IDS_Attacks.dest, IDS_Attacks.signature, IDS_Attacks.category, IDS_Attacks.severity span=5m
 | rename IDS_Attacks.* as *</query>
         <earliest>$global_time_tok.earliest$</earliest>
         <latest>$global_time_tok.latest$</latest>
         <sampleRatio>1</sampleRatio>
     </search>
-    <fieldset submitButton="false">
-        <input type="time" token="global_time_tok" searchWhenChanged="true">
+    <fieldset submitButton="true" autoRun="true">
+        <input type="time" token="global_time_tok" searchWhenChanged="false">
             <label></label>
             <default>
                 <earliest>-7d@h</earliest>
                 <latest>now</latest>
             </default>
+        </input>
+        <input type="multiselect" token="host_tok" searchWhenChanged="false">
+            <label>Hosts</label>
+            <choice value="*">All</choice>
+            <prefix>host IN(</prefix>
+            <suffix>)</suffix>
+            <valuePrefix>"</valuePrefix>
+            <valueSuffix>"</valueSuffix>
+            <delimiter>,</delimiter>
+            <fieldForLabel>host</fieldForLabel>
+            <fieldForValue>host</fieldForValue>
+            <search>
+                <query>| tstats count where index=* sourcetype=opnsense:suricata* by host</query>
+                <earliest>-24h@h</earliest>
+                <latest>now</latest>
+            </search>
+            <initialValue>*</initialValue>
         </input>
     </fieldset>
     <row>
@@ -104,7 +121,7 @@
             <title>Attack Details</title>
             <table>
                 <search>
-                    <query>| tstats `opnsense_summariesonly` count from datamodel=Intrusion_Detection.IDS_Attacks where sourcetype=opnsense:* by _time, IDS_Attacks.src, IDS_Attacks.dest, IDS_Attacks.signature, IDS_Attacks.category, IDS_Attacks.severity span=5m
+                    <query>| tstats `opnsense_summariesonly` count from datamodel=Intrusion_Detection.IDS_Attacks where sourcetype=opnsense:suricata* $host_tok$ by _time, IDS_Attacks.src, IDS_Attacks.dest, IDS_Attacks.signature, IDS_Attacks.category, IDS_Attacks.severity span=5m
 | rename IDS_Attacks.* as *
 | stats max(_time) as latest_time, sparkline(sum(count), 1h) as sparkline, dc(dest) as unique_destinations, sum(count) as count by src, signature, category
 | convert timeformat="%c" ctime(latest_time)
