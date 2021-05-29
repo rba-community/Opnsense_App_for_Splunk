@@ -14,6 +14,7 @@ APP has a web UI | Yes, this app contains views.
 ```TEXT
 Version 1.1.1
 
+- Added version to dashboards to support jQuery v3.5
 ```
 
 ## Documentation
