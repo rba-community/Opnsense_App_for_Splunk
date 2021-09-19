@@ -10,15 +10,13 @@ The OPNsense App for Splunk helps make your firewall data meaningful. Visualize 
 
  Info | Description
 ------|----------
-Version | 1.1.1 - See on [Splunkbase](https://splunkbase.splunk.com/app/5372/)
+Version | 1.1.2 - See on [Splunkbase](https://splunkbase.splunk.com/app/5372/)
 Vendor Product Version | [OPNsense® 20.7](https://opnsense.org/)
 APP has a web UI | Yes, this app contains views.
 
 ```TEXT
-Version 1.1.1
+Version 1.1.2
 
-- Added version to dashboards to support jQuery v3.5.
-- Converted License Overview panel on Data overview dashboard to be schedule report.
 ```
 
 ## Documentation
