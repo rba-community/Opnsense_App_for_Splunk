@@ -1,4 +1,4 @@
-<form hideFilters="True">
+<form hideFilters="True" version="1.1">
     <label>System Overview</label>
     <search id="picker">
         <query>| tstats count where `opnsense_system_index` sourcetype=opnsense:system by host</query>
@@ -32,11 +32,11 @@
         </progress>
     </search>
     <search id="system_base">
-        <query>`opnsense_system_index` sourcetype=opnsense:system collection_type=system 
-| eval update_msg=if(status=="update", "Update Available", "Up to Date") 
-| eval can_update=if(update_msg="Update Available", 2, 1) 
-| eval new_version=if(can_update==2, 'all_packages.opnsense.new', "n/a") 
-| eval reboot_msg=if(upgrade_needs_reboot=="1", "Reboot Required", "Reboot Not Required") 
+        <query>`opnsense_system_index` sourcetype=opnsense:system collection_type=system
+| eval update_msg=if(status=="update", "Update Available", "Up to Date")
+| eval can_update=if(update_msg="Update Available", 2, 1)
+| eval new_version=if(can_update==2, 'all_packages.opnsense.new', "n/a")
+| eval reboot_msg=if(upgrade_needs_reboot=="1", "Reboot Required", "Reboot Not Required")
 | stats latest(product_version) as product_version, latest(new_version) as new_version, latest(status_msg) as status_msg, max(_time) as last_check, latest(os_version) as os_version, latest(update_msg) as update_msg, latest(can_update) as can_update, latest(reboot_msg) as reboot_msg, latest(upgrade_needs_reboot) as upgrade_needs_reboot $by_host$</query>
         <earliest>$global_time_tok.earliest$</earliest>
         <latest>$global_time_tok.latest$</latest>

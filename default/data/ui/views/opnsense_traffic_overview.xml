@@ -1,4 +1,4 @@
-<form>
+<form version="1.1">
     <label>Traffic Overview</label>
     <search id="base">
         <query>| `opnsense_tstats` count from datamodel=Network_Traffic.All_Traffic where sourcetype=opnsense:* $host_tok$ by _time, All_Traffic.src, All_Traffic.dest, All_Traffic.transport, All_Traffic.action span=5m
@@ -8,7 +8,7 @@
         <sampleRatio>1</sampleRatio>
     </search>
     <search id="base_detail">
-        <query>| tstats `opnsense_summariesonly` count from datamodel=Network_Traffic.All_Traffic where sourcetype=opnsense:* $host_tok$ by _time, All_Traffic.src, All_Traffic.dest span=5m 
+        <query>| tstats `opnsense_summariesonly` count from datamodel=Network_Traffic.All_Traffic where sourcetype=opnsense:* $host_tok$ by _time, All_Traffic.src, All_Traffic.dest span=5m
 | rename All_Traffic.* as *</query>
         <earliest>$global_time_tok.earliest$</earliest>
         <latest>$global_time_tok.latest$</latest>
