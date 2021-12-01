@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "TA-opnsense": {
-      "version": ">=1.4.1",
+      "version": ">=1.5.0",
       "optional": false
     },
     "Splunk_SA_CIM": {
