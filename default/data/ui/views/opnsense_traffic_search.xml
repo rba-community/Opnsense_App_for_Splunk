@@ -142,7 +142,7 @@
         <panel>
             <table>
                 <search base="traffic_base">
-                    <query>| `opnsense_trunc(src_port,5)`
+                    <query>| `opnsense_trunk(src_port,5)`
 | `opnsense_ctime(latest_time)`
 | sort - count
 | fields latest_time,action,src,src_port,dest,transport,dest_port,count
