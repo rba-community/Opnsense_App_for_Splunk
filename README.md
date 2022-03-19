@@ -8,7 +8,7 @@
 
 The OPNsense App for Splunk helps make your firewall data meaningful. Visualize system or security related events recorded by the [OPNsense® Firewall](https://opnsense.org/). This app requires the [OPNsense Add-on for Splunk](https://splunkbase.splunk.com/app/4538/).
 
-## Documentation 
+## Documentation
 
 Full Documentation can be found at [https://splunk-opnsense.ztsplunker.com/](https://splunk-opnsense.ztsplunker.com/).
 
