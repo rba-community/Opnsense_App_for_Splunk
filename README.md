@@ -17,6 +17,7 @@ APP has a web UI | Yes, this app contains views.
 ```TEXT
 Version 1.1.2
 
+- New search macro for local IPs.
 ```
 
 ## Documentation
