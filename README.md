@@ -16,15 +16,17 @@ Full Documentation can be found at [https://splunk-opnsense.ztsplunker.com/](htt
 
  Info | Description
 ------|----------
-Version | 1.1.1 - See on [Splunkbase](https://splunkbase.splunk.com/app/5372/)
+Version | 1.1.2 - See on [Splunkbase](https://splunkbase.splunk.com/app/5372/)
 Vendor Product Version | [OPNsense® 20.7](https://opnsense.org/)
 APP has a web UI | Yes, this app contains views.
 
 ```TEXT
-Version 1.1.1
+Version 1.1.2
 
-- Added version to dashboards to support jQuery v3.5.
-- Converted License Overview panel on Data overview dashboard to be schedule report.
+- New search macro for local IPs.
+- New search macro for truncating multi-valued fields.
+- New lookup file added for standard actions and transports.
+- New Dashboard: Traffic Search.
 ```
 
 ## Bugs/Feature requests
