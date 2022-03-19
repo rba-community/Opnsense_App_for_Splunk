@@ -25,6 +25,7 @@ Version 1.1.2
 
 - New search macro for local IPs.
 - New search macro for truncating multi-valued fields.
+- New search macro for converting unix timestamps.
 - New lookup file added for standard actions and transports.
 - New Dashboards: Traffic Search,
 - All dashbaords now in darkmode by default.

@@ -1,7 +1,7 @@
 <form theme="dark" version="1.1">
     <label>Traffic Search</label>
     <search id="traffic_base">
-        <query>| tstats `opnsense_summariesonly` max(_time) as latest_time, values(All_Traffic.src_port) as src_port, count from datamodel=Network_Traffic.All_Traffic where * $src_tok$ $dest_tok$ $dest_port_tok$ $transport_tok$ $action_tok$ by All_Traffic.src,All_Traffic.dest,All_Traffic.action,All_Traffic.transport,All_Traffic.dest_port
+        <query>| tstats `opnsense_summariesonly` max(_time) as latest_time, values(All_Traffic.src_port) as src_port, count from datamodel=Network_Traffic.All_Traffic where sourcetype=opnsense:* $src_tok$ $dest_tok$ $dest_port_tok$ $transport_tok$ $action_tok$ by All_Traffic.src,All_Traffic.dest,All_Traffic.action,All_Traffic.transport,All_Traffic.dest_port
 | `drop_dm_object_name("All_Traffic")`</query>
         <earliest>$global_time_tok.earliest$</earliest>
         <latest>$global_time_tok.latest$</latest>
@@ -75,6 +75,7 @@
             <valuePrefix>"</valuePrefix>
             <valueSuffix>"</valueSuffix>
             <delimiter>,</delimiter>
+            <default>*</default>
             <fieldForLabel>action</fieldForLabel>
             <fieldForValue>action</fieldForValue>
             <search>
@@ -89,7 +90,7 @@
     <row>
         <panel>
             <chart>
-                <title>Source</title>
+                <title>Source(s)</title>
                 <search base="traffic_base">
                     <query>| top src</query>
                 </search>
@@ -99,7 +100,7 @@
         </panel>
         <panel>
             <chart>
-                <title>Destination</title>
+                <title>Destination(s)</title>
                 <search base="traffic_base">
                     <query>| top dest</query>
                 </search>
@@ -109,7 +110,7 @@
         </panel>
         <panel>
             <chart>
-                <title>Destination Port</title>
+                <title>Destination Port(s)</title>
                 <search base="traffic_base">
                     <query>| top dest_port</query>
                 </search>
@@ -119,7 +120,7 @@
         </panel>
         <panel>
             <chart>
-                <title>Transport</title>
+                <title>Transport(s)</title>
                 <search base="traffic_base">
                     <query>| top transport</query>
                 </search>
@@ -129,12 +130,13 @@
         </panel>
         <panel>
             <chart>
-                <title>Action</title>
+                <title>Action(s)</title>
                 <search base="traffic_base">
                     <query>| top action</query>
                 </search>
                 <option name="charting.chart">pie</option>
                 <option name="charting.drilldown">none</option>
+                <option name="charting.fieldColors">{"allowed":#53A051,"blocked":#DC4E41,"redirected":#006D9C,"teardown":#5A4575}</option>
             </chart>
         </panel>
     </row>
@@ -150,12 +152,17 @@
                 </search>
                 <option name="count">10</option>
                 <option name="dataOverlayMode">none</option>
-                <option name="drilldown">none</option>
+                <option name="drilldown">cell</option>
                 <option name="percentagesRow">false</option>
-                <option name="refresh.display">progressbar</option>
                 <option name="rowNumbers">false</option>
                 <option name="totalsRow">false</option>
                 <option name="wrap">true</option>
+                <format type="color" field="action">
+                    <colorPalette type="map">{"allowed":#53A051,"blocked":#DC4E41,"redirected":#006D9C,"teardown":#5A4575}</colorPalette>
+                </format>
+                <drilldown>
+                    <link target="_blank">search?q=%7C%20from%20datamodel%3ANetwork_Traffic.All_Traffic%20%0A%7C%20search%20src%3D$row.src$%20dest%3D$row.dest$%20dest_port%3D$row.dest_port$%20transport%3D$row.transport$%20action%3D$row.action$&amp;earliest=$global_time_tok.earliest$&amp;latest=$global_time_tok.latest$</link>
+                </drilldown>
             </table>
         </panel>
     </row>
