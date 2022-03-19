@@ -18,11 +18,12 @@ APP has a web UI | Yes, this app contains views.
 Version 1.1.2
 
 - New search macro for local IPs.
+- New search macro for truncating multi-valued fields.
 ```
 
 ## Documentation
 
-Full Documentation can be found at https://splunk-opnsense-app-documentation.rtfd.io/.
+Full Documentation can be found at <https://splunk-opnsense-app-documentation.rtfd.io/>.
 
 ## Bugs/Feature requests
 
