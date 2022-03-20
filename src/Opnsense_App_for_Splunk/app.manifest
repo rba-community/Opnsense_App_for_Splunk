@@ -34,8 +34,8 @@
     },
     "releaseNotes": {
       "name": "README",
-      "text": "./README.md",
-      "uri": "https://splunk-opnsense-app-documentation.rtfd.io"
+      "text": "./README.txt",
+      "uri": "https://splunk-opnsense.ztsplunker.com"
     }
   },
   "dependencies": {
