@@ -1,0 +1,169 @@
+<form theme="dark" version="1.1">
+    <label>Traffic Search</label>
+    <search id="traffic_base">
+        <query>| tstats `opnsense_summariesonly` max(_time) as latest_time, values(All_Traffic.src_port) as src_port, count from datamodel=Network_Traffic.All_Traffic where sourcetype=opnsense:* $src_tok$ $dest_tok$ $dest_port_tok$ $transport_tok$ $action_tok$ by All_Traffic.src,All_Traffic.dest,All_Traffic.action,All_Traffic.transport,All_Traffic.dest_port
+| `drop_dm_object_name("All_Traffic")`</query>
+        <earliest>$global_time_tok.earliest$</earliest>
+        <latest>$global_time_tok.latest$</latest>
+        <sampleRatio>1</sampleRatio>
+    </search>
+    <fieldset submitButton="true" autoRun="false">
+        <input type="time" token="global_time_tok" searchWhenChanged="false">
+            <label></label>
+            <default>
+                <earliest>-24h@h</earliest>
+                <latest>now</latest>
+            </default>
+        </input>
+        <input type="text" token="src">
+            <label>Source</label>
+            <change>
+                <condition match="len('value')&gt;0">
+                    <set token="src_tok">All_Traffic.src IN($value$)</set>
+                </condition>
+                <condition>
+                    <set token="src_tok">All_Traffic.src=*</set>
+                </condition>
+            </change>
+        </input>
+        <input type="text" token="dest">
+            <label>Destination</label>
+            <change>
+                <condition match="len('value')&gt;0">
+                    <set token="dest_tok">All_Traffic.dest IN($value$)</set>
+                </condition>
+                <condition>
+                    <set token="dest_tok">All_Traffic.dest=*</set>
+                </condition>
+            </change>
+        </input>
+        <input type="text" token="dest_port">
+            <label>Destination Port</label>
+            <change>
+                <condition match="len('value')&gt;0">
+                    <set token="dest_port_tok">All_Traffic.dest_port IN($value$)</set>
+                </condition>
+                <condition>
+                    <set token="dest_port_tok">All_Traffic.dest_port=*</set>
+                </condition>
+            </change>
+        </input>
+        <input type="multiselect" token="transport_tok">
+            <label>Transport</label>
+            <choice value="*">All</choice>
+            <prefix>All_Traffic.transport IN(</prefix>
+            <suffix>)</suffix>
+            <valuePrefix>"</valuePrefix>
+            <valueSuffix>"</valueSuffix>
+            <delimiter>,</delimiter>
+            <default>*</default>
+            <fieldForLabel>transport</fieldForLabel>
+            <fieldForValue>transport</fieldForValue>
+            <search>
+                <query>| inputlookup opnsense_transports
+| dedup transport
+| sort + transport</query>
+                <earliest>-1s</earliest>
+                <latest>now</latest>
+            </search>
+        </input>
+        <input type="multiselect" token="action_tok">
+            <label>Action</label>
+            <choice value="*">All</choice>
+            <prefix>All_Traffic.action IN(</prefix>
+            <suffix>)</suffix>
+            <valuePrefix>"</valuePrefix>
+            <valueSuffix>"</valueSuffix>
+            <delimiter>,</delimiter>
+            <default>*</default>
+            <fieldForLabel>action</fieldForLabel>
+            <fieldForValue>action</fieldForValue>
+            <search>
+                <query>| inputlookup opnsense_actions
+| dedup action
+| sort + action</query>
+                <earliest>-1s</earliest>
+                <latest>now</latest>
+            </search>
+        </input>
+    </fieldset>
+    <row>
+        <panel>
+            <chart>
+                <title>Source(s)</title>
+                <search base="traffic_base">
+                    <query>| top src</query>
+                </search>
+                <option name="charting.chart">pie</option>
+                <option name="charting.drilldown">none</option>
+            </chart>
+        </panel>
+        <panel>
+            <chart>
+                <title>Destination(s)</title>
+                <search base="traffic_base">
+                    <query>| top dest</query>
+                </search>
+                <option name="charting.chart">pie</option>
+                <option name="charting.drilldown">none</option>
+            </chart>
+        </panel>
+        <panel>
+            <chart>
+                <title>Destination Port(s)</title>
+                <search base="traffic_base">
+                    <query>| top dest_port</query>
+                </search>
+                <option name="charting.chart">pie</option>
+                <option name="charting.drilldown">none</option>
+            </chart>
+        </panel>
+        <panel>
+            <chart>
+                <title>Transport(s)</title>
+                <search base="traffic_base">
+                    <query>| top transport</query>
+                </search>
+                <option name="charting.chart">pie</option>
+                <option name="charting.drilldown">none</option>
+            </chart>
+        </panel>
+        <panel>
+            <chart>
+                <title>Action(s)</title>
+                <search base="traffic_base">
+                    <query>| top action</query>
+                </search>
+                <option name="charting.chart">pie</option>
+                <option name="charting.drilldown">none</option>
+                <option name="charting.fieldColors">{"allowed":#53A051,"blocked":#DC4E41,"redirected":#006D9C,"teardown":#5A4575}</option>
+            </chart>
+        </panel>
+    </row>
+    <row>
+        <panel>
+            <table>
+                <search base="traffic_base">
+                    <query>| `opnsense_trunk(src_port,5)`
+| `opnsense_ctime(latest_time)`
+| sort - count
+| fields latest_time,action,src,src_port,dest,transport,dest_port,count
+| head 100</query>
+                </search>
+                <option name="count">10</option>
+                <option name="dataOverlayMode">none</option>
+                <option name="drilldown">cell</option>
+                <option name="percentagesRow">false</option>
+                <option name="rowNumbers">false</option>
+                <option name="totalsRow">false</option>
+                <option name="wrap">true</option>
+                <format type="color" field="action">
+                    <colorPalette type="map">{"allowed":#53A051,"blocked":#DC4E41,"redirected":#006D9C,"teardown":#5A4575}</colorPalette>
+                </format>
+                <drilldown>
+                    <link target="_blank">search?q=%7C%20from%20datamodel%3ANetwork_Traffic.All_Traffic%20%0A%7C%20search%20src%3D$row.src$%20dest%3D$row.dest$%20dest_port%3D$row.dest_port$%20transport%3D$row.transport$%20action%3D$row.action$&amp;earliest=$global_time_tok.earliest$&amp;latest=$global_time_tok.latest$</link>
+                </drilldown>
+            </table>
+        </panel>
+    </row>
+</form>

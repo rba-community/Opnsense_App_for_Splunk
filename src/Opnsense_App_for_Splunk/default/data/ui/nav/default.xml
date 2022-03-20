@@ -1,0 +1,15 @@
+<nav search_view="search">
+  <view name="opnsense_system_overview" />
+  <view name="opnsense_data_overview" default="true" />
+  <collection label="Traffic">
+    <view name="opnsense_traffic_overview" />
+    <view name="opnsense_traffic_search" />
+  </collection>
+  <collection label="Intrusion Detection">
+    <view name="opnsense_ids_overview" />
+    <view name="opnsense_ids_search" />
+  </collection>
+  <view name="opnsense_vpn_overview" />
+  <view name="opnsense_auth_overview" />
+  <view name="search" />
+</nav>

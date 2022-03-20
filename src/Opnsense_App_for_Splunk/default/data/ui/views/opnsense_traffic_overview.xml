@@ -1,4 +1,4 @@
-<form version="1.1">
+<form theme="dark" version="1.1">
     <label>Traffic Overview</label>
     <search id="base">
         <query>| `opnsense_tstats` count from datamodel=Network_Traffic.All_Traffic where sourcetype=opnsense:* $host_tok$ by _time, All_Traffic.src, All_Traffic.dest, All_Traffic.transport, All_Traffic.action span=5m
@@ -34,8 +34,8 @@
             <fieldForValue>host</fieldForValue>
             <search>
                 <query>| tstats `opnsense_summariesonly` count from datamodel=Network_Traffic.All_Traffic where sourcetype=opnsense:* by host</query>
-                <earliest>-24h@h</earliest>
-                <latest>now</latest>
+                <earliest>$global_time_tok.earliest$</earliest>
+                <latest>$global_time_tok.latest$</latest>
             </search>
             <initialValue>*</initialValue>
         </input>
@@ -69,7 +69,7 @@
                 <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
                 <option name="charting.chart.stackMode">default</option>
                 <option name="charting.chart.style">shiny</option>
-                <option name="charting.drilldown">none</option>
+                <option name="charting.drilldown">all</option>
                 <option name="charting.layout.splitSeries">0</option>
                 <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
                 <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
@@ -79,6 +79,9 @@
                 <option name="trellis.enabled">0</option>
                 <option name="trellis.scales.shared">1</option>
                 <option name="trellis.size">medium</option>
+                <drilldown>
+                    <link target="_blank">/app/Opnsense_App_for_Splunk/opnsense_traffic_search?form.src=$click.value$&amp;form.global_time_tok.earliest=$earliest$&amp;form.global_time_tok.latest=$latest$</link>
+                </drilldown>
             </chart>
         </panel>
         <panel>
@@ -119,6 +122,10 @@
                 <option name="trellis.enabled">0</option>
                 <option name="trellis.scales.shared">1</option>
                 <option name="trellis.size">medium</option>
+                <option name="charting.drilldown">all</option>
+                <drilldown>
+                    <link target="_blank">/app/Opnsense_App_for_Splunk/opnsense_traffic_search?form.dest=$click.value$&amp;form.global_time_tok.earliest=$earliest$&amp;form.global_time_tok.latest=$latest$</link>
+                </drilldown>
             </chart>
         </panel>
         <panel>
@@ -159,6 +166,10 @@
                 <option name="trellis.enabled">0</option>
                 <option name="trellis.scales.shared">1</option>
                 <option name="trellis.size">medium</option>
+                <option name="charting.drilldown">all</option>
+                <drilldown>
+                    <link target="_blank">/app/Opnsense_App_for_Splunk/opnsense_traffic_search?form.transport=$click.value$&amp;form.global_time_tok.earliest=$earliest$&amp;form.global_time_tok.latest=$latest$</link>
+                </drilldown>
             </chart>
         </panel>
     </row>
@@ -167,7 +178,7 @@
             <chart>
                 <title>Traffic Over Time by Action</title>
                 <search base="base">
-                    <query>| timechart span=5m count by action</query>
+                    <query>| timechart minspan=10m count by action</query>
                 </search>
                 <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
                 <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -206,7 +217,7 @@
             <chart>
                 <title>Traffic Over Time by Protocol</title>
                 <search base="base">
-                    <query>| timechart span=5m count by transport</query>
+                    <query>| timechart minspan=10m count by transport</query>
                 </search>
                 <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
                 <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -257,6 +268,10 @@
                 <option name="rowNumbers">false</option>
                 <option name="totalsRow">false</option>
                 <option name="wrap">true</option>
+                <option name="drilldown">cell</option>
+                <drilldown>
+                    <link target="_blank">/app/Opnsense_App_for_Splunk/opnsense_traffic_search?form.src=$row.src$&amp;form.global_time_tok.earliest=$earliest$&amp;$global_time_tok.latest=$latest$</link>
+                </drilldown>
             </table>
         </panel>
         <panel>
@@ -273,6 +288,10 @@
                 <option name="rowNumbers">false</option>
                 <option name="totalsRow">false</option>
                 <option name="wrap">true</option>
+                <option name="drilldown">cell</option>
+                <drilldown>
+                    <link target="_blank">/app/Opnsense_App_for_Splunk/opnsense_traffic_search?form.dest=$row.dest$&amp;form.global_time_tok.earliest=$earliest$&amp;$global_time_tok.latest=$latest$</link>
+                </drilldown>
             </table>
         </panel>
     </row>

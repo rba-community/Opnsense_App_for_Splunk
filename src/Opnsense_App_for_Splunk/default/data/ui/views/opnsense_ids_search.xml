@@ -1,0 +1,211 @@
+<form theme="dark" version="1.1">
+    <label>IDS Search</label>
+    <search id="ids_base">
+        <query>| tstats `opnsense_summariesonly` max(_time) as latest_time, values(IDS_Attacks.dest_port) as dest_port count from datamodel=Intrusion_Detection.IDS_Attacks where sourcetype=opnsense:* $severity_tok$ $action_tok$ $category_tok$ $signature_tok$ $src_tok$ $dest_tok$ $dest_port_tok$ by IDS_Attacks.category, IDS_Attacks.signature, IDS_Attacks.severity, IDS_Attacks.severity_id, IDS_Attacks.src, IDS_Attacks.dest, IDS_Attacks.action
+| `drop_dm_object_name("IDS_Attacks")`</query>
+        <earliest>$global_time_tok.earliest$</earliest>
+        <latest>$global_time_tok.latest$</latest>
+        <sampleRatio>1</sampleRatio>
+    </search>
+    <fieldset submitButton="true">
+        <input type="time" token="global_time_tok">
+            <label></label>
+            <default>
+                <earliest>-24h@h</earliest>
+                <latest>now</latest>
+            </default>
+        </input>
+        <input type="multiselect" token="severity_tok">
+            <label>Severity</label>
+            <choice value="*">All</choice>
+            <choice value="critical">Critical</choice>
+            <choice value="high">High</choice>
+            <choice value="medium">Medium</choice>
+            <choice value="low">Low</choice>
+            <choice value="informational">Informational</choice>
+            <choice value="unknown">Unknown</choice>
+            <default>*</default>
+            <prefix>IDS_Attacks.severity IN(</prefix>
+            <suffix>)</suffix>
+            <valuePrefix>"</valuePrefix>
+            <valueSuffix>"</valueSuffix>
+            <delimiter>,</delimiter>
+        </input>
+        <input type="dropdown" token="action_tok">
+            <label>Action</label>
+            <choice value="*">All</choice>
+            <choice value="allowed">Allowed</choice>
+            <choice value="blocked">Blocked</choice>
+            <default>*</default>
+            <prefix>IDS_Attacks.action="</prefix>
+            <suffix>"</suffix>
+        </input>
+        <input type="text" token="category" searchWhenChanged="false">
+            <label>Category</label>
+            <change>
+                <condition match="len('value')&gt;0">
+                    <set token="category_tok">IDS_Attacks.category="$value$"</set>
+                </condition>
+                <condition>
+                    <set token="category_tok">IDS_Attacks.category=*</set>
+                </condition>
+            </change>
+        </input>
+        <input type="text" token="signature">
+            <label>Signature</label>
+            <change>
+                <condition match="len('value')&gt;0">
+                    <set token="signature_tok">IDS_Attacks.signature="$value$"</set>
+                </condition>
+                <condition>
+                    <set token="signature_tok">IDS_Attacks.signature=*</set>
+                </condition>
+            </change>
+        </input>
+        <input type="text" token="src">
+            <label>Source</label>
+            <change>
+                <condition match="len('value')&gt;0">
+                    <set token="src_tok">IDS_Attacks.src IN($value$)</set>
+                </condition>
+                <condition>
+                    <set token="src_tok">IDS_Attacks.src=*</set>
+                </condition>
+            </change>
+        </input>
+        <input type="text" token="dest">
+            <label>Destination</label>
+            <change>
+                <condition match="len('value')&gt;0">
+                    <set token="dest_tok">IDS_Attacks.dest IN($value$)</set>
+                </condition>
+                <condition>
+                    <set token="dest_tok">IDS_Attacks.dest=*</set>
+                </condition>
+            </change>
+        </input>
+        <input type="text" token="dest_port">
+            <label>Destination Port</label>
+            <change>
+                <condition match="len('value')&gt;0">
+                    <set token="dest_port_tok">IDS_Attacks.dest_port IN($value$)</set>
+                </condition>
+                <condition>
+                    <set token="dest_port_tok">IDS_Attacks.dest_port=*</set>
+                </condition>
+            </change>
+        </input>
+    </fieldset>
+    <row>
+        <panel>
+            <title>Severity</title>
+            <chart>
+                <search base="ids_base">
+                    <query>| top severity</query>
+                </search>
+                <option name="charting.chart">pie</option>
+                <option name="charting.drilldown">none</option>
+                <option name="charting.fieldColors">{"critical":#DC4E41,"high":#F1813F,"medium":#F8BE34,"low":#006D9C,"informational":#708794}</option>
+                <option name="refresh.display">progressbar</option>
+            </chart>
+        </panel>
+        <panel>
+            <title>Action</title>
+            <chart>
+                <search base="ids_base">
+                    <query>| top action</query>
+                </search>
+                <option name="charting.chart">pie</option>
+                <option name="charting.drilldown">none</option>
+                <option name="charting.fieldColors">{"blocked":#DC4E41,"allowed":#53A051,"unknown":#708794}</option>
+                <option name="refresh.display">progressbar</option>
+            </chart>
+        </panel>
+        <panel>
+            <title>Category</title>
+            <chart>
+                <search base="ids_base">
+                    <query>| top category</query>
+                </search>
+                <option name="charting.chart">pie</option>
+                <option name="charting.drilldown">none</option>
+                <option name="refresh.display">progressbar</option>
+            </chart>
+        </panel>
+        <panel>
+            <title>Signature</title>
+            <chart>
+                <search base="ids_base">
+                    <query>| top signature</query>
+                </search>
+                <option name="charting.chart">pie</option>
+                <option name="charting.drilldown">none</option>
+                <option name="refresh.display">progressbar</option>
+            </chart>
+        </panel>
+    </row>
+    <row>
+        <panel>
+            <title>Source</title>
+            <chart>
+                <search base="ids_base">
+                    <query>| top src</query>
+                </search>
+                <option name="charting.chart">pie</option>
+                <option name="charting.drilldown">none</option>
+                <option name="refresh.display">progressbar</option>
+            </chart>
+        </panel>
+        <panel>
+            <title>Destination</title>
+            <chart>
+                <search base="ids_base">
+                    <query>| top dest</query>
+                </search>
+                <option name="charting.chart">pie</option>
+                <option name="charting.drilldown">none</option>
+                <option name="refresh.display">progressbar</option>
+            </chart>
+        </panel>
+        <panel>
+            <title>Destination Port</title>
+            <chart>
+                <search base="ids_base">
+                    <query>| top dest_port</query>
+                </search>
+                <option name="charting.chart">pie</option>
+                <option name="charting.drilldown">none</option>
+                <option name="refresh.display">progressbar</option>
+            </chart>
+        </panel>
+    </row>
+    <row>
+        <panel>
+            <table>
+                <search base="ids_base">
+                    <query>| `opnsense_trunk(dest_port,5)`
+| `opnsense_ctime(latest_time)`
+| sort 100 +severity_id, -count
+| fields latest_time,severity,action,category,signature,src,dest,dest_port,count</query>
+                </search>
+                <option name="count">20</option>
+                <option name="dataOverlayMode">none</option>
+                <option name="drilldown">cell</option>
+                <option name="percentagesRow">false</option>
+                <option name="refresh.display">progressbar</option>
+                <option name="rowNumbers">false</option>
+                <option name="totalsRow">false</option>
+                <option name="wrap">true</option>
+                <format type="color" field="action">
+                    <colorPalette type="map">{"blocked":#DC4E41,"allowed":#53A051,"unknown":#708794}</colorPalette>
+                </format>
+                <format type="color" field="severity">
+                    <colorPalette type="map">{"critical":#DC4E41,"high":#F1813F,"medium":#F8BE34,"low":#006D9C,"informational":#708794}</colorPalette>
+                </format>
+                <drilldown>
+                    <link target="_blank">search?q=%7C%20from%20datamodel%3AIntrusion_Detection.IDS_Attacks%0A%7C%20search%20sourcetype%3Dopnsense%3A*%20severity%3D$row.severity|s$%20action%3D$row.action|s$%20signature%3D$row.signature|s$%20src%3D$row.src|s$%20dest%3D$row.dest|s$&amp;earliest=$global_time_tok.earliest$&amp;latest=$global_time_tok.latest$</link>
+                </drilldown>
+            </table>
+        </panel>
+    </row>
+</form>

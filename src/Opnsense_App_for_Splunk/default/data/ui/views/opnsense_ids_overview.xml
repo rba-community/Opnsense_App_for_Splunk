@@ -1,4 +1,4 @@
-<form version="1.1">
+<form theme="dark" version="1.1">
     <label>IDS Overview</label>
     <search id="base">
         <query>| `opnsense_tstats` count from datamodel=Intrusion_Detection.IDS_Attacks where sourcetype=opnsense:* $host_tok$ by _time, IDS_Attacks.src, IDS_Attacks.dest, IDS_Attacks.signature, IDS_Attacks.category, IDS_Attacks.severity span=5m
@@ -27,12 +27,40 @@
             <fieldForValue>host</fieldForValue>
             <search>
                 <query>| tstats `opnsense_summariesonly` count from datamodel=Intrusion_Detection.IDS_Attacks where sourcetype=opnsense:* by host</query>
-                <earliest>-24h@h</earliest>
-                <latest>now</latest>
+                <earliest>$global_time_tok.earliest$</earliest>
+                <latest>$global_time_tok.latest$</latest>
             </search>
             <initialValue>*</initialValue>
         </input>
     </fieldset>
+    <row>
+        <panel>
+            <title>Attack Category Overview</title>
+            <chart>
+                <search base="base">
+                    <query>| stats count by category | sort 10 - count</query>
+                </search>
+                <option name="charting.chart">pie</option>
+                <option name="charting.drilldown">all</option>
+                <drilldown>
+                    <link target="_blank">/app/Opnsense_App_for_Splunk/opnsense_ids_search?form.global_time_tok.earliest=$earliest$&amp;form.global_time_tok.latest=$latest$&amp;form.category=$click.value$</link>
+                </drilldown>
+            </chart>
+        </panel>
+        <panel>
+            <title>Attack Signature Overview</title>
+            <chart>
+                <search base="base">
+                    <query>| stats count by signature | sort 10 - count</query>
+                </search>
+                <option name="charting.chart">pie</option>
+                <option name="charting.drilldown">all</option>
+                <drilldown>
+                    <link target="_blank">/app/Opnsense_App_for_Splunk/opnsense_ids_search?form.global_time_tok.earliest=$earliest$&amp;form.global_time_tok.latest=$latest$&amp;form.signature=$click.value$</link>
+                </drilldown>
+            </chart>
+        </panel>
+    </row>
     <row>
         <panel>
             <title>Attacks Over Time by Severity</title>
@@ -63,56 +91,32 @@
                 <option name="charting.chart.stackMode">default</option>
                 <option name="charting.chart.style">shiny</option>
                 <option name="charting.drilldown">none</option>
+                <option name="charting.fieldColors">{"critical": "#dc4e41", "high": "#f1813f", "medium": "#f8be34", "low": "#0877a6"}</option>
                 <option name="charting.layout.splitSeries">0</option>
                 <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
                 <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
                 <option name="charting.legend.mode">standard</option>
                 <option name="charting.legend.placement">top</option>
                 <option name="charting.lineWidth">2</option>
-                <option name="charting.fieldColors">{"critical": "#dc4e41", "high": "#f1813f", "medium": "#f8be34", "low": "#0877a6"}</option>
                 <option name="trellis.enabled">0</option>
                 <option name="trellis.scales.shared">1</option>
                 <option name="trellis.size">medium</option>
             </chart>
         </panel>
         <panel>
-            <title>Attack Category Overview</title>
+            <title>Top Activity by Source</title>
             <chart>
                 <search base="base">
-                    <query>| stats count by category</query>
+                    <query>| stats count by src | sort 5 - count</query>
                 </search>
-                <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
-                <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
-                <option name="charting.axisLabelsY.majorUnit">1</option>
-                <option name="charting.axisTitleX.visibility">collapsed</option>
                 <option name="charting.axisTitleY.visibility">collapsed</option>
-                <option name="charting.axisTitleY2.visibility">visible</option>
-                <option name="charting.axisX.abbreviation">none</option>
-                <option name="charting.axisX.scale">linear</option>
-                <option name="charting.axisY.abbreviation">none</option>
-                <option name="charting.axisY.scale">linear</option>
-                <option name="charting.axisY2.abbreviation">none</option>
-                <option name="charting.axisY2.enabled">0</option>
-                <option name="charting.axisY2.scale">inherit</option>
-                <option name="charting.chart">pie</option>
-                <option name="charting.chart.bubbleMaximumSize">50</option>
-                <option name="charting.chart.bubbleMinimumSize">10</option>
-                <option name="charting.chart.bubbleSizeBy">area</option>
-                <option name="charting.chart.nullValueMode">gaps</option>
-                <option name="charting.chart.showDataLabels">none</option>
-                <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
-                <option name="charting.chart.stackMode">default</option>
-                <option name="charting.chart.style">shiny</option>
-                <option name="charting.drilldown">none</option>
-                <option name="charting.layout.splitSeries">0</option>
-                <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
-                <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
-                <option name="charting.legend.mode">standard</option>
-                <option name="charting.legend.placement">none</option>
-                <option name="charting.lineWidth">2</option>
-                <option name="trellis.enabled">0</option>
-                <option name="trellis.scales.shared">1</option>
-                <option name="trellis.size">medium</option>
+                <option name="charting.chart">bar</option>
+                <option name="charting.legend.placement">right</option>
+                <option name="refresh.display">progressbar</option>
+                <option name="charting.drilldown">all</option>
+                <drilldown>
+                    <link target="_blank">/app/Opnsense_App_for_Splunk/opnsense_ids_search?form.global_time_tok.earliest=$earliest$&amp;form.global_time_tok.latest=$latest$&amp;form.src=$click.value$</link>
+                </drilldown>
             </chart>
         </panel>
     </row>
@@ -131,14 +135,16 @@
                     <latest>$global_time_tok.latest$</latest>
                     <sampleRatio>1</sampleRatio>
                 </search>
-                <option name="count">20</option>
+                <option name="count">10</option>
                 <option name="dataOverlayMode">none</option>
-                <option name="drilldown">none</option>
+                <option name="drilldown">cell</option>
                 <option name="percentagesRow">false</option>
-                <option name="refresh.display">progressbar</option>
                 <option name="rowNumbers">false</option>
                 <option name="totalsRow">false</option>
                 <option name="wrap">true</option>
+                <drilldown>
+                    <link target="_blank">/app/Opnsense_App_for_Splunk/opnsense_ids_search?form.global_time_tok.earliest=$earliest$&amp;form.global_time_tok.latest=$latest$&amp;form.src=$row.src$&amp;form.signature=$row.signature$</link>
+                </drilldown>
             </table>
         </panel>
     </row>

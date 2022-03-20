@@ -5,7 +5,7 @@
     "id": {
       "group": null,
       "name": "Opnsense_App_for_Splunk",
-      "version": "1.1.1"
+      "version": "1.1.2"
     },
     "author": [
       {
@@ -34,18 +34,18 @@
     },
     "releaseNotes": {
       "name": "README",
-      "text": "./README.md",
-      "uri": "https://splunk-opnsense-app-documentation.rtfd.io"
+      "text": "./README.txt",
+      "uri": "https://splunk-opnsense.ztsplunker.com"
     }
   },
   "dependencies": {
     "TA-opnsense": {
-      "version": ">=1.4.1",
+      "version": ">=1.5.0",
       "optional": false
     },
     "Splunk_SA_CIM": {
       "version": ">=4.0.0",
-      "optional": true
+      "optional": false
     }
   },
   "tasks": null,
