@@ -18,7 +18,7 @@
         <input type="text" token="src">
             <label>Source</label>
             <change>
-                <condition match="isnotnull('value')">
+                <condition match="len('value')&gt;0">
                     <set token="src_tok">All_Traffic.src IN($value$)</set>
                 </condition>
                 <condition>
@@ -29,7 +29,7 @@
         <input type="text" token="dest">
             <label>Destination</label>
             <change>
-                <condition match="isnotnull('value')">
+                <condition match="len('value')&gt;0">
                     <set token="dest_tok">All_Traffic.dest IN($value$)</set>
                 </condition>
                 <condition>
@@ -40,7 +40,7 @@
         <input type="text" token="dest_port">
             <label>Destination Port</label>
             <change>
-                <condition match="isnotnull('value')">
+                <condition match="len('value')&gt;0">
                     <set token="dest_port_tok">All_Traffic.dest_port IN($value$)</set>
                 </condition>
                 <condition>
