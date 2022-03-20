@@ -28,8 +28,8 @@
             <fieldForValue>host</fieldForValue>
             <search>
                 <query>| tstats `opnsense_summariesonly` count from datamodel=Network_Sessions.All_Sessions where sourcetype=opnsense:* by host</query>
-                <earliest>-24h@h</earliest>
-                <latest>now</latest>
+                <earliest>$global_time_tok.earliest$</earliest>
+                <latest>$global_time_tok.latest$</latest>
             </search>
             <initialValue>*</initialValue>
         </input>
