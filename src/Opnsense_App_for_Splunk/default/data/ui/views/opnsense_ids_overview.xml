@@ -133,8 +133,10 @@
                 <search base="base">
                     <query>| stats count by src | sort 5 - count</query>
                 </search>
+                <option name="charting.axisTitleY.visibility">collapsed</option>
                 <option name="charting.chart">bar</option>
                 <option name="charting.drilldown">none</option>
+                <option name="charting.legend.placement">right</option>
                 <option name="refresh.display">progressbar</option>
             </chart>
         </panel>
