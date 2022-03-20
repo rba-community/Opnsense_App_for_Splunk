@@ -27,7 +27,7 @@ Version 1.1.2
 - New search macro for truncating multi-valued fields.
 - New search macro for converting unix timestamps.
 - New lookup file added for standard actions and transports.
-- New Dashboards: Traffic Search,
+- New Dashboards: Traffic Search, IDS Search
 - Added top signatures panel to IDS overview dashboard.
 - All dashbaords now in darkmode by default.
 ```
