@@ -17,19 +17,24 @@ Full Documentation can be found at [https://splunk-opnsense.ztsplunker.com/](htt
  Info | Description
 ------|----------
 Version | 1.1.2 - See on [Splunkbase](https://splunkbase.splunk.com/app/5372/)
-Vendor Product Version | [OPNsense® 20.7](https://opnsense.org/)
+Vendor Product Version | [OPNsense® 22.1](https://opnsense.org/)
 APP has a web UI | Yes, this app contains views.
+Required TA | [OPNsense Add-on for Splunk](https://splunkbase.splunk.com/app/4538/)
 
 ```TEXT
 Version 1.1.2
 
-- New search macro for local IPs.
-- New search macro for truncating multi-valued fields.
-- New search macro for converting unix timestamps.
-- New lookup file added for standard actions and transports.
-- New Dashboards: Traffic Search, IDS Search
-- Added top signatures panel to IDS overview dashboard.
+New
+- added search macro for local IPs.
+- added search macro for truncating multi-valued fields.
+- added search macro for converting unix timestamps.
+- lookup file added for standard actions and transports.
+- Dashboards: Traffic Search, IDS Search
 - All dashbaords now in darkmode by default.
+
+Updated
+- Added top signatures panel to IDS overview dashboard.
+- Added drilldowns for Traffic and IDS overview dashboards.
 ```
 
 ## Bugs/Feature requests
