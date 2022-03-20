@@ -22,7 +22,7 @@
                     <set token="src_tok">All_Traffic.src IN($value$)</set>
                 </condition>
                 <condition>
-                    <set token="src_tok"></set>
+                    <set token="src_tok">All_Traffic.src=*</set>
                 </condition>
             </change>
         </input>
@@ -33,7 +33,7 @@
                     <set token="dest_tok">All_Traffic.dest IN($value$)</set>
                 </condition>
                 <condition>
-                    <set token="dest_tok"></set>
+                    <set token="dest_tok">All_Traffic.dest=*</set>
                 </condition>
             </change>
         </input>
@@ -44,7 +44,7 @@
                     <set token="dest_port_tok">All_Traffic.dest_port IN($value$)</set>
                 </condition>
                 <condition>
-                    <set token="dest_port_tok"></set>
+                    <set token="dest_port_tok">All_Traffic.dest_port=*</set>
                 </condition>
             </change>
         </input>
