@@ -30,7 +30,7 @@ New
 - added search macro for converting unix timestamps.
 - lookup file added for standard actions and transports.
 - Dashboards: Traffic Search, IDS Search
-- All dashbaords now in darkmode by default.
+- All dashboards now in dark mode by default.
 
 Updated
 - Added top signatures panel to IDS overview dashboard.
