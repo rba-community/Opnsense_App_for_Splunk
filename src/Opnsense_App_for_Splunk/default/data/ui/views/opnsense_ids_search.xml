@@ -44,7 +44,7 @@
             <label>Category</label>
             <change>
                 <condition match="len('value')&gt;0">
-                    <set token="category_tok">IDS_Attacks.category IN($value$)</set>
+                    <set token="category_tok">IDS_Attacks.category="$value$"</set>
                 </condition>
                 <condition>
                     <set token="category_tok">IDS_Attacks.category=*</set>
@@ -55,7 +55,7 @@
             <label>Signature</label>
             <change>
                 <condition match="len('value')&gt;0">
-                    <set token="signature_tok">IDS_Attacks.signature IN($value$)</set>
+                    <set token="signature_tok">IDS_Attacks.signature="$value$"</set>
                 </condition>
                 <condition>
                     <set token="signature_tok">IDS_Attacks.signature=*</set>
