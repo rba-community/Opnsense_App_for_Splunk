@@ -222,7 +222,7 @@
             </input>
             <table>
                 <search>
-                    <query>`opnsense_system_index` sourcetype="opnsense:system" collection_type="plugin" $host_tok$
+                    <query>`opnsense_system_index` sourcetype="opnsense:system" collection_type="package" $host_tok$
 | $p_token_match$
 | dedup host, name
 | sort name
