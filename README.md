@@ -16,7 +16,7 @@ Full Documentation can be found at [https://splunk-opnsense.ztsplunker.com/](htt
 
 ## Disclaimer
 
-> *This Add-on is __not__ affiliated with [__OPNsense.org__](https://opnsense.org/) and is not sponsored or sanctioned by the OPNsense team. Please visit [https://opnsense.org/](https://opnsense.org/) for more information about the OPNsense firewall.*
+> This Splunk App is community driven and not affiliated with the official [OPNsense® Firewall](https://opnsense.org/). As such, the included documentation does not contain information on how to get started with this firewall. Rather, this documentation serves as a guide to help visualize the data in Splunk. Please visit [https://opnsense.org/](https://opnsense.org/) for documentation on installing/configuring your own OPNsense firewall.
 
 ## About
 

@@ -1,6 +1,22 @@
 # Release history for the OPNsense app for Splunk
 
-The latest version of the OPNsense app for Splunk is version 1.1.2. See [Release notes for the OPNsense app for Splunk](../../releases/) of the latest version.
+The latest version of the OPNsense app for Splunk is version 1.1.3. See [Release notes for the OPNsense app for Splunk](../../releases/) of the latest version.
+
+## v1.1.2 <small>March 20, 2022</small>
+
+### New features
+
+- added search macro for local IPs.
+- added search macro for truncating multi-valued fields.
+- added search macro for converting unix timestamps.
+- lookup file added for standard actions and transports.
+- Dashboards: Traffic Search, IDS Search
+- All dashboards now in dark mode by default.
+
+### Updated
+
+- Added top signatures panel to IDS overview dashboard.
+- Added drilldowns for Traffic and IDS overview dashboards
 
 ## v1.1.1 <small>Sept 18, 2021</small>
 
