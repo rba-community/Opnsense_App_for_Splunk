@@ -1,7 +1,9 @@
 site_name: OPNsense app for Splunk
-edit_uri: ""
+edit_uri: edit/main/docs/
 repo_url: https://github.com/ZachChristensen28/Opnsense_App_for_Splunk
 repo_name: ZachChristensen28/Opnsense_App_for_Splunk
+site_description: >-
+  Welcome to the Home of the OPNsense App for Splunk documentation. The OPNsense App for Splunk helps make your firewall data meaningful. Visualize system or security related events recorded by the OPNsense® Firewall. This app requires the OPNsense Add-on for Splunk.
 
 plugins:
   - git-revision-date-localized:
@@ -10,8 +12,6 @@ plugins:
   - search
   - minify:
       minify_html: true
-      minify_js: true
-      minify_css: true
 
 markdown_extensions:
   - toc:
@@ -32,6 +32,23 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
+  - def_list
+  - footnotes
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
 
 theme:
   name: material
@@ -48,6 +65,12 @@ theme:
     # - toc.integrate
     - navigation.tracking
     - content.code.annotate
+    - content.code.copy
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.action.edit
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -72,6 +95,8 @@ extra:
       link: https://github.com/ZachChristensen28
     - icon: fontawesome/brands/twitter
       link: https://twitter.com/ZachTheSplunker
+
+copyright: Copyright &copy; 2023 ZachTheSplunker
 
 nav:
   - Home: index.md
