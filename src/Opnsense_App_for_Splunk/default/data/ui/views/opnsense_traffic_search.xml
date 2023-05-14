@@ -1,8 +1,13 @@
 <form theme="dark" version="1.1">
     <label>Traffic Search</label>
     <search id="traffic_base">
-        <query>| tstats `opnsense_summariesonly` max(_time) as latest_time, values(All_Traffic.src_port) as src_port, count from datamodel=Network_Traffic.All_Traffic where sourcetype=opnsense:* $src_tok$ $dest_tok$ $dest_port_tok$ $transport_tok$ $action_tok$ by All_Traffic.src,All_Traffic.dest,All_Traffic.action,All_Traffic.transport,All_Traffic.dest_port
-| `drop_dm_object_name("All_Traffic")`</query>
+        <query>| tstats `opnsense_summariesonly` max(_time) as latest_time,
+            values(All_Traffic.src_port) as src_port, values(All_Traffic.dest_interface) as
+            dest_interface, count from datamodel=Network_Traffic.All_Traffic where
+            sourcetype=opnsense:* $src_tok$ $dest_tok$ $dest_port_tok$ $transport_tok$ $action_tok$
+            $dest_int_tok$ by
+            All_Traffic.src,All_Traffic.dest,All_Traffic.action,All_Traffic.transport,All_Traffic.dest_port
+            | `drop_dm_object_name("All_Traffic")`</query>
         <earliest>$global_time_tok.earliest$</earliest>
         <latest>$global_time_tok.latest$</latest>
         <sampleRatio>1</sampleRatio>
@@ -61,8 +66,8 @@
             <fieldForValue>transport</fieldForValue>
             <search>
                 <query>| inputlookup opnsense_transports
-| dedup transport
-| sort + transport</query>
+                    | dedup transport
+                    | sort + transport</query>
                 <earliest>-1s</earliest>
                 <latest>now</latest>
             </search>
@@ -80,10 +85,32 @@
             <fieldForValue>action</fieldForValue>
             <search>
                 <query>| inputlookup opnsense_actions
-| dedup action
-| sort + action</query>
+                    | dedup action
+                    | sort + action</query>
                 <earliest>-1s</earliest>
                 <latest>now</latest>
+            </search>
+        </input>
+        <input type="multiselect" token="dest_int_tok">
+            <label>Dest Interface</label>
+            <choice value="*">All</choice>
+            <default>*</default>
+            <prefix>All_Traffic.dest_interface IN(</prefix>
+            <suffix>)</suffix>
+            <initialValue>*</initialValue>
+            <valuePrefix>"</valuePrefix>
+            <valueSuffix>"</valueSuffix>
+            <delimiter>,</delimiter>
+            <fieldForLabel>dest_interface</fieldForLabel>
+            <fieldForValue>dest_interface</fieldForValue>
+            <search>
+                <query>| tstats `opnsense_summariesonly` count from
+                    datamodel=Network_Traffic.All_Traffic where sourcetype=opnsense:* by
+                    All_Traffic.dest_interface
+                    | `drop_dm_object_name(All_Traffic)`
+                    | dedup dest_interface</query>
+                <earliest>$global_time_tok.earliest$</earliest>
+                <latest>$global_time_tok.latest$</latest>
             </search>
         </input>
     </fieldset>
@@ -136,7 +163,8 @@
                 </search>
                 <option name="charting.chart">pie</option>
                 <option name="charting.drilldown">none</option>
-                <option name="charting.fieldColors">{"allowed":#53A051,"blocked":#DC4E41,"redirected":#006D9C,"teardown":#5A4575}</option>
+                <option name="charting.fieldColors">
+                    {"allowed":#53A051,"blocked":#DC4E41,"redirected":#006D9C,"teardown":#5A4575}</option>
             </chart>
         </panel>
     </row>
@@ -145,23 +173,27 @@
             <table>
                 <search base="traffic_base">
                     <query>| `opnsense_trunk(src_port,5)`
-| `opnsense_ctime(latest_time)`
-| sort - count
-| fields latest_time,action,src,src_port,dest,transport,dest_port,count
-| head 100</query>
+                        | `opnsense_ctime(latest_time)`
+                        | sort - count
+                        | fields
+                        latest_time,action,src,src_port,dest,transport,dest_port,dest_interface,count
+                        | head 100</query>
                 </search>
                 <option name="count">10</option>
                 <option name="dataOverlayMode">none</option>
                 <option name="drilldown">cell</option>
                 <option name="percentagesRow">false</option>
+                <option name="refresh.display">progressbar</option>
                 <option name="rowNumbers">false</option>
                 <option name="totalsRow">false</option>
                 <option name="wrap">true</option>
                 <format type="color" field="action">
-                    <colorPalette type="map">{"allowed":#53A051,"blocked":#DC4E41,"redirected":#006D9C,"teardown":#5A4575}</colorPalette>
+                    <colorPalette type="map">
+                        {"allowed":#53A051,"blocked":#DC4E41,"redirected":#006D9C,"teardown":#5A4575}</colorPalette>
                 </format>
                 <drilldown>
-                    <link target="_blank">search?q=%7C%20from%20datamodel%3ANetwork_Traffic.All_Traffic%20%0A%7C%20search%20src%3D$row.src$%20dest%3D$row.dest$%20dest_port%3D$row.dest_port$%20transport%3D$row.transport$%20action%3D$row.action$&amp;earliest=$global_time_tok.earliest$&amp;latest=$global_time_tok.latest$</link>
+                    <link target="_blank">
+                        search?q=%7C%20from%20datamodel%3ANetwork_Traffic.All_Traffic%20%0A%7C%20search%20src%3D$row.src$%20dest%3D$row.dest$%20dest_port%3D$row.dest_port$%20transport%3D$row.transport$%20action%3D$row.action$&amp;earliest=$global_time_tok.earliest$&amp;latest=$global_time_tok.latest$</link>
                 </drilldown>
             </table>
         </panel>
