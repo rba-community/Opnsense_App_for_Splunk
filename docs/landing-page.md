@@ -32,9 +32,9 @@ This documentation assumes the following:
 
 Info | Description
 ---- | -----------
-Version | 1.1.3 - [Splunkbase](https://splunkbase.splunk.com/app/5372/) \| [GitHub](https://github.com/ZachChristensen28/Opnsense_App_for_Splunk)
-Vendor Product Version | [OPNsense® 22.x](https://opnsense.org/)
+Version | 1.1.4 - [Splunkbase](https://splunkbase.splunk.com/app/5372/) \| [GitHub](https://github.com/ZachChristensen28/Opnsense_App_for_Splunk)
+Vendor Product Version | [OPNsense® 22 \| 23](https://opnsense.org/)
 
-[Get Started](getting-started/app-dependencies/){ .md-button .md-button--primary }
+[Get Started](/getting-started/app-dependencies/){ .md-button .md-button--primary }
 
 --8<-- "includes/abbreviations.md"

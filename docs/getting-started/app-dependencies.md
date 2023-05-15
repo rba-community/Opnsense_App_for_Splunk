@@ -7,5 +7,5 @@ The following table describes the Add-ons that are needed to utilize the full ca
 
 Splunkbase Add-on | Version | Description
 ----------------- | ------- | -----------
-[OPNsense Add-on (TA-opnsense)](https://splunkbase.splunk.com/app/4538/) | >= 1.5.0 | Technical Add-on needed for Splunk to correctly parse the OPNsense firewall data.
-[Splunk Common Information Model](https://splunkbase.splunk.com/app/1621/) | >= 4.0.0 | The Splunk CIM normalizes the data into datamodels which this app leverages for performance.
+[OPNsense Add-on (TA-opnsense)](https://splunkbase.splunk.com/app/4538/) | >= 1.5.3 | Technical Add-on needed for Splunk to correctly parse the OPNsense firewall data.
+[Splunk Common Information Model](https://splunkbase.splunk.com/app/1621/) | >= 5.0.0 | The Splunk CIM normalizes the data into datamodels which this app leverages for performance.

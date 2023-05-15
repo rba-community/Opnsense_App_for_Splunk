@@ -5,7 +5,7 @@
 ![Appinspect](https://github.com/ZachChristensen28/Opnsense_App_for_Splunk/actions/workflows/appinspect.yml/badge.svg)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/ZachChristensen28/Opnsense_App_for_Splunk)
 [![Splunkbase App](https://img.shields.io/badge/Splunkbase-Opnsense%20App%20for%20Splunk-blue)](https://splunkbase.splunk.com/app/5372/)
-[![Splunk CIM Version](https://img.shields.io/badge/Splunk%20CIM%20Version-4.x|5.x-success)](https://docs.splunk.com/Documentation/CIM/latest/User/Overview)
+[![Splunk CIM Version](https://img.shields.io/badge/Splunk%20CIM%20Version-5.x-success)](https://docs.splunk.com/Documentation/CIM/latest/User/Overview)
 ![Splunk Cloud Compatibility](https://img.shields.io/badge/Splunk%20Cloud%20Ready-Victoria%20|%20Classic-informational?logo=splunk)
 
 The OPNsense App for Splunk helps make your firewall data meaningful. Visualize system or security related events recorded by the [OPNsense® Firewall](https://opnsense.org/). This app requires the [OPNsense Add-on for Splunk](https://splunkbase.splunk.com/app/4538/).
