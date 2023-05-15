@@ -22,17 +22,10 @@ Full Documentation can be found at [https://splunk-opnsense.ztsplunker.com/](htt
 
  Info | Description
 ------|----------
-Version | 1.1.3 - See on [Splunkbase](https://splunkbase.splunk.com/app/5372/)
+Version | 1.1.4 - See on [Splunkbase](https://splunkbase.splunk.com/app/5372/)
 Vendor Product Version | [OPNsense® 22.x](https://opnsense.org/)
 APP has a web UI | Yes, this app contains views.
 Required TA | [OPNsense Add-on for Splunk](https://splunkbase.splunk.com/app/4538/)
-
-```TEXT
-Version 1.1.3
-
-Fixes
-- Fixed plugin panel on System Overview dashboard (#8).
-```
 
 ## Bugs/Feature requests
 
