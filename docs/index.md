@@ -12,11 +12,11 @@ hide:
 
 ![OPNsense Add-on for Splunk](/images/splunkbase-ta-opnsense.png){ align=left width=200 }
 
-- Complete [logging prerequisites](https://splunk-opnsense-ta.ztsplunker.com/getting-started/prerequisites/){ target="_blank" }
+- Complete [logging prerequisites](https://ta-opnsense.rba.community/getting-started/prerequisites/){ target="_blank" }
 - Install on Indexers, Search Heads
 - Configure inputs
 
-[See Documentation :material-file-document-check:](https://splunk-opnsense-ta.ztsplunker.com/landing-page/ "See Documentation"){ .md-button .md-button--primary target="_blank" }
+[See Documentation :material-file-document-check:](https://ta-opnsense.rba.community/landing-page/ "See Documentation"){ .md-button .md-button--primary target="_blank" }
 [View on Splunkbase](https://splunkbase.splunk.com/app/4538/ "View on Splunkbase"){ .md-button .md-button--primary target="_blank" }
 
 </div>

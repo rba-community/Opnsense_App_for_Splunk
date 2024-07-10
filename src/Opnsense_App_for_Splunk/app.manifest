@@ -5,11 +5,11 @@
     "id": {
       "group": null,
       "name": "Opnsense_App_for_Splunk",
-      "version": "1.1.4"
+      "version": "1.1.5"
     },
     "author": [
       {
-        "name": "Zach Christensen",
+        "name": "The RBA Community",
         "email": null,
         "company": null
       }
@@ -23,19 +23,19 @@
     },
     "commonInformationModels": null,
     "license": {
-      "name": null,
+      "name": "Apache 2.0",
       "text": null,
-      "uri": null
+      "uri": "https://github.com/rba-community/Opnsense_App_for_Splunk/blob/master/LICENSE"
     },
     "privacyPolicy": {
-      "name": null,
+      "name": "Splunk Privacy Policy",
       "text": null,
-      "uri": null
+      "uri": "https://www.splunk.com/en_us/legal/privacy/privacy-policy.html"
     },
     "releaseNotes": {
       "name": "README",
       "text": "./README.txt",
-      "uri": "https://splunk-opnsense.ztsplunker.com"
+      "uri": "https://opnsense.rba.community"
     }
   },
   "dependencies": {

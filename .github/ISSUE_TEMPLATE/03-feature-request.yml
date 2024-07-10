@@ -19,8 +19,8 @@ body:
     attributes:
       label: Related links
       description: >-
-        (optional) Please list all links to open and closed [issues](https://github.com/ZachChristensen28/Opnsense_App_for_Splunk/issues) or to [documentation sections](https://splunk-opnsense.ztsplunker.com/landing-page/)
+        (optional) Please list all links to open and closed [issues](https://github.com/rba-community/Opnsense_App_for_Splunk/issues) or to [documentation sections](https://opnsense.rba.community/landing-page/)
         that are relevant to your idea.
       value: |-
-        - [Feature Request](https://splunk-opnsense.ztsplunker.com/landing-page/)
+        - [Feature Request](https://opnsense.rba.community/landing-page/)
         -
