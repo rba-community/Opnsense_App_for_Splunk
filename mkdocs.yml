@@ -1,7 +1,7 @@
 site_name: OPNsense app for Splunk
 edit_uri: edit/main/docs/
-repo_url: https://github.com/ZachChristensen28/Opnsense_App_for_Splunk
-repo_name: ZachChristensen28/Opnsense_App_for_Splunk
+repo_url: https://github.com/rba-community/Opnsense_App_for_Splunk
+repo_name: rba-community/Opnsense_App_for_Splunk
 site_description: >-
   Welcome to the Home of the OPNsense App for Splunk documentation. The OPNsense App for Splunk helps make your firewall data meaningful. Visualize system or security related events recorded by the OPNsense® Firewall. This app requires the OPNsense Add-on for Splunk.
 
@@ -90,13 +90,11 @@ theme:
 extra:
   social:
     - icon: fontawesome/brands/linkedin
-      link: https://www.linkedin.com/in/zachthesplunker/
+      link: https://www.linkedin.com/groups/12702283/
     - icon: fontawesome/brands/github
-      link: https://github.com/ZachChristensen28
-    - icon: fontawesome/brands/twitter
-      link: https://twitter.com/ZachTheSplunker
+      link: https://github.com/rba-community/Opnsense_App_for_Splunk
 
-copyright: Copyright &copy; 2023 ZachTheSplunker
+copyright: Copyright &copy; 2024 The RBA Community
 
 nav:
   - Home: index.md

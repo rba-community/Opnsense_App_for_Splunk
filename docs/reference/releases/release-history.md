@@ -1,6 +1,14 @@
 # Release history for the OPNsense app for Splunk
 
-The latest version of the OPNsense app for Splunk is version 1.1.4. See [Release notes for the OPNsense app for Splunk](../../releases/) of the latest version.
+The latest version of the OPNsense app for Splunk is version 1.1.5. See [Release notes for the OPNsense app for Splunk](../../releases/) of the latest version.
+
+## [v1.1.4 <small>May 14, 2023</small>](https://github.com/rba-community/Opnsense_App_for_Splunk/releases/tag/v1.1.4){ target="blank" }
+
+## What's Changed
+
+* Added search filter for destination interface - [#29](https://github.com/rba-community/Opnsense_App_for_Splunk/issues/29){ target="blank" }
+
+**Full Changelog**: [v1.1.3...v1.1.4](https://github.com/rba-community/Opnsense_App_for_Splunk/compare/v1.1.3...v1.1.4){ target=blank }
 
 ## v1.1.3 <small>September 15, 2022</small>
 
